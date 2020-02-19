@@ -1,7 +1,7 @@
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-                            Author : Ankit Raj 
-        Problem Link : https://www.codechef.com/FEB20B/problems/CASH
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+//                             Author : Ankit Raj 
+//         Problem Link : https://www.codechef.com/FEB20B/problems/CASH
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 #include <bits/stdc++.h>
 #define ll long long int
 #define lld long double

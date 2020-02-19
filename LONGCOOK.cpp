@@ -1,7 +1,7 @@
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-                            Author : Ankit Raj 
-        Problem Link : https://www.codechef.com/FEB20B/problems/LONGCOOK/
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #include <bits/stdc++.h>
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+//                             Author : Ankit Raj 
+//         Problem Link : https://www.codechef.com/FEB20B/problems/LONGCOOK/
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #include <bits/stdc++.h>
 #define int long long int
 #define pb push_back
 #define F first

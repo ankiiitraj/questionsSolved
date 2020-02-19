@@ -1,7 +1,7 @@
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-                            Author : Ankit Raj 
-        Problem Link : https://www.codechef.com/FEB20B/problems/THEATER
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+//                             Author : Ankit Raj 
+//         Problem Link : https://www.codechef.com/FEB20B/problems/THEATER
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 #include <bits/stdc++.h>
 #define int long long int
 using namespace std;

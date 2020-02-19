@@ -1,7 +1,7 @@
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-                            Author : Ankit Raj 
-        Problem Link : https://www.codechef.com/FEB20B/problems/SNUG_FIT
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+//                             Author : Ankit Raj 
+//         Problem Link : https://www.codechef.com/FEB20B/problems/SNUG_FIT
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 #include <bits/stdc++.h>
 #define int long long int
 using namespace std;
