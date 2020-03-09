@@ -1,11 +1,10 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *//
 //                               Author : Ankit Raj                                       //
-//                      Problem Name    :    Kuroni and Impossible Calculation            //
-//         		         Problem Link   : https://codeforces.com/contest/1305/problem/C   //
+//                      Problem Name    :    Unusual Competitions                         //
+//         		Problem Link : https://codeforces.com/contest/1323/problem/C              //
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *//
 #include <bits/stdc++.h>
 #define int long long int
-// #define all(a) (a.begin(), a.end())
 #define len length
 #define pb push_back
 #define F first
@@ -23,19 +22,47 @@ int32_t main()
 #endif
 	// int t; cin >> t; while(t--)
 	{
-		int n, m, ans = 1;
-		cin >> n >> m;
-		int a[n];
+		int n, cnt = 0, ans = 0;
+		cin >> n;
+
+		string s;
+		cin >> s;
 		for (int i = 0; i < n; ++i)
-			cin >> a[i];
-		if(n > m){
-			cout << 0 << endl;
+			if (s[i] == ')')
+				cnt++;
+		if (n & 1) {
+			cout << -1 << endl;
 			return 0;
 		}
-		for(int i = 0; i < n; ++i)
-			for (int j = i +1; j < n; ++j)
-				ans = ans*abs(a[i] - a[j])%m;
+		if (cnt != n / 2) {
+			cout << -1 << endl;
+			return 0;
+		}
+		int i = 0, open = 0, closed = 0;
+		while (i < n) {
+			if (s[i] == '(')
+				open++;
+			else
+				closed++;
+
+			if (open < closed) {
+				int j = i;
+				while (open != closed)
+				{
+					++j;
+					if (s[j] == '(')
+						open++;
+					else
+						closed++;
+				}
+				ans += j - i +1;
+				i = j;
+			}
+			++i;
+		}
 		cout << ans << endl;
+
+
 	}
 	return 0;
 }

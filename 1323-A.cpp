@@ -1,11 +1,10 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *//
 //                               Author : Ankit Raj                                       //
-//                      Problem Name    :    Kuroni and Impossible Calculation            //
-//         		         Problem Link   : https://codeforces.com/contest/1305/problem/C   //
+//                      Problem Name    :    Even Subset Sum Problem                      //
+//         		Problem Link : https://codeforces.com/contest/1323/problem/A              //
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *//
 #include <bits/stdc++.h>
 #define int long long int
-// #define all(a) (a.begin(), a.end())
 #define len length
 #define pb push_back
 #define F first
@@ -21,21 +20,31 @@ int32_t main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 	{
-		int n, m, ans = 1;
-		cin >> n >> m;
+		int n, odd = 0;
+		cin >> n;
 		int a[n];
-		for (int i = 0; i < n; ++i)
+		for (int i = 0; i < n; ++i){
 			cin >> a[i];
-		if(n > m){
-			cout << 0 << endl;
-			return 0;
+			if(a[i]&1)
+				odd++;
 		}
-		for(int i = 0; i < n; ++i)
-			for (int j = i +1; j < n; ++j)
-				ans = ans*abs(a[i] - a[j])%m;
-		cout << ans << endl;
+		if(odd != n){
+			cout << n - odd << endl;
+			for(int i = 0; i < n; ++i)
+				if(a[i]%2 == 0)
+					cout << i +1 << " ";
+		}else{
+			if(n == 1){
+				cout << -1;
+			}else{
+				cout << 2 << endl << 1 << " " << 2;
+			}
+
+		}
+		cout << endl;
+		
 	}
 	return 0;
 }

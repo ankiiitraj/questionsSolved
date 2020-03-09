@@ -1,7 +1,7 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *//
 //                               Author : Ankit Raj                                       //
-//                      Problem Name    :    Kuroni and Impossible Calculation            //
-//         		         Problem Link   : https://codeforces.com/contest/1305/problem/C   //
+//                      Problem Name    :    Even Subset Sum Problem            //
+//         		Problem Link : https://codeforces.com/contest/1305/problem/C              //
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *//
 #include <bits/stdc++.h>
 #define int long long int
