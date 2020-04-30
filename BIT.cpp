@@ -33,5 +33,8 @@ int32_t main()
 #endif
 	int a[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	for(int i = 1; i <= 10; ++i){
-		update(i, a[i -1
+		update(i, a[i -1]);
+	}
+	cout << query(5) << endl;
+}
 			
