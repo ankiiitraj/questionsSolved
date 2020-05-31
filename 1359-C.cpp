@@ -23,12 +23,37 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
-		cin >> n;
-		vi a(n);
-		scnarr(a, n);
+		int h, c, t, res;
+		double ans = 1000000000000.00;
+		cin >> h >> c >> t;
 
-		
+		if(t >= h){
+			cout << 1 << endl;
+		}else if(t <= (double)(h + c)/2){
+			cout << 2 << endl;
+		}else{
+			int l = 1, r = 100000000000000000, mid = (l + r)/2;
+			while(l < r){
+				mid = l + (r - l) / 2;
+				if(mid%2==0)
+					mid++;
+				double avg = (double)((mid/2 +1)*h + (mid/2)*c)/mid;
+				
+				if(t >= avg){
+					r = mid -1;
+				}else{
+					l = mid +1;
+				}
+
+				if(ans >= abs(t - avg)){
+					ans = abs(t - avg);
+					res = mid;
+				}
+
+			}
+			cout << res << endl;
+
+		}
 
 
 	}

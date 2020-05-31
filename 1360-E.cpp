@@ -25,11 +25,35 @@ int32_t main()
 	{
 		int n, flag = 0;
 		cin >> n;
-		vi a(n);
-		scnarr(a, n);
+		string s[n];
+		for(int i = 0; i < n; ++i){
+			cin >> s[i];
+		}
 
-		
+		for(int i = 0; i < n; ++i){
+			for(int j = 0; j < n; ++j){
+				if(s[i][j] == '1' and i != n -1 and j != n -1){
+					if(s[i +1][j] == '1'){
+						;
+					}else if(s[i][j +1] == '1'){
+						;
+					}else{
+						flag = 1;
+						break;
+					}
+				}
+			}
+			if(flag)
+				break;
+		}
 
+		flag ? puts("NO") : puts("YES");
+		// for(int i = 0; i < n; ++i){
+		// 	for(int j = 0; j < n; ++j){
+		// 		cout << s[i][j] << " ";
+		// 	}
+		// 	cout << endl;
+		// }		
 
 	}
 	return 0;

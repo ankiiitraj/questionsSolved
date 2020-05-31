@@ -23,14 +23,34 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
-		cin >> n;
-		vi a(n);
-		scnarr(a, n);
-
-		
+		int n, m, a, b;
+		cin >> n >> m >> a >> b;
+		int grid[n][m] = {0};
 
 
+		for(int i = 0; i < n; ++i){
+			for(int j = 0; j < m; ++j)
+				grid[i][j] = 0;
+		}
+
+		if(n*a != m*b){
+			cout << "NO\n";
+		}else{
+			vi temp(m, b);
+			cout << "YES\n";
+			for(int i = 0; i < n; ++i){
+				for(int j = 0; j < a; ++j){
+					grid[i][(i*a + j)%m] = 1;
+				}
+			}
+
+			for(int i = 0; i < n; ++i){
+				for(int j = 0; j < m; ++j){
+					cout << grid[i][j];
+				}
+				cout << endl;
+			}
+		}
 	}
 	return 0;
 }

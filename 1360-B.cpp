@@ -23,13 +23,17 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
+		int n, ans = LONG_MAX;
 		cin >> n;
 		vi a(n);
 		scnarr(a, n);
 
-		
+		sort(all(a));
 
+		for(int i = 0; i < n -1; ++i){
+			ans = min(ans, abs(a[i] - a[i +1]));
+		}
+		cout << ans << endl;
 
 	}
 	return 0;

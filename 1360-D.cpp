@@ -23,13 +23,19 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
-		cin >> n;
-		vi a(n);
-		scnarr(a, n);
+		int n, k, ans = MOD*1000000;
+		cin >> n >> k;
 
+		for(int i = 1; i*i <= n; ++i){
+			if(n % i == 0 and i <= k){
+				ans = min(ans, n/i);
+				if(n/i <= k)
+					ans = min(ans, n/(n/i));
+			}
+		}
+
+		cout << ans << endl;
 		
-
 
 	}
 	return 0;

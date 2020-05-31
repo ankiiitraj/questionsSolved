@@ -38,51 +38,6 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 /* -------------------------------Solution Sarted--------------------------------------*/
 
-string digi[10] = {"1110111", "0010010", "1011101", "1011011", "0111010", "1101011", "1101111", "1010010", "1111111", "1111011"};
-map <string, int> digs = {{"1110111", 0}, {"0010010", 1}, {"1011101", 2}, {"1011011", 3}, {"0111010", 4}, {"1101011", 5}, {"1101111", 6}, {"1010010", 7}, {"1111111", 8}, {"1111011", 9}};
-int n;
-
-string dp[2005][2005];
-
-string solve(vector <string> &s, int pos, int k){
-	if(k == 0){
-		string ans;
-		for(int i = 0; i < n; ++i){
-			if(digs.find(s[i]) == digs.end()){
-				return "-1";
-			}
-			ans += to_string(digs[s[i]]);
-		}
-		return ans;
-	}else if(pos >= n){
-		return "-1";
-	}
-
-	if(dp[pos][k] != "")
-		return dp[pos][k];
-
-	string ans = "-1";
-	for(int i = 9; i >= 0; --i){
-		int cnt = 0;
-		for(int j = 0; j < 7; ++j){
-			if(s[pos][j] != digi[i][j] and s[pos][j] == '0'){
-				cnt++;
-			}else if(s[pos][j] != digi[i][j] and s[pos][j] == '1'){
-				cnt = 5000;
-				break;
-			}
-		}
-		if(cnt <= k){
-			string temp = s[pos];
-			s[pos] = digi[i];
-			dp[pos][k] = max(dp[pos][k], solve(s, pos +1, k - cnt));
-			s[pos] = temp;
-		}
-	}
-	return dp[pos][k];
-}
-
-
 int32_t main()
 {
 	faster;
@@ -90,17 +45,82 @@ int32_t main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-
+	int t; cin >> t; while(t--)
 	{
-		int k;
-		cin >> n >> k;
-		vector<string> s(n);
-
-		for(int i = 0; i < n; ++i){
-			cin >> s[i];
+		int n, m;
+		cin >> n >> m;
+		set<int> set;
+		if(m == 1){
+			string s;
+			cin >> s;
+			if(s[0] == '0'){
+				cout << 1;
+			}else{
+				cout << 0;
+			}
+			cout << endl;
+			continue;
 		}
-
-		cout << (solve(s, 0, k)) << endl;
+		int total = pow(2, m);
+		int median = (total - 1)/2, left = median +1, right = total - left;
+		for(int i = 0; i < n; ++i){
+			string s;
+			cin >> s;
+			int cur = 0;
+			for(int j = m -1, k = 0; j >= 0; --j, ++k){
+				cur += (s[j] - '0')*(pow(2, k));
+			}
+			set.insert(cur);
+			if(cur > median){
+				right--;
+				if(!(left - right <= 1 and left - right > -1)){
+					for(int j = median -1; j >= 0; --j){
+						if(set.find(j) == set.end()){
+							median = j;
+							left--;
+							right++;
+							break;
+						}
+					}
+				}
+			}else if(cur < median){
+				left--;
+				if(!(left - right <= 1 and left - right > -1)){
+					for(int j = median +1; j < total; ++j){
+						if(set.find(j) == set.end()){
+							median = j;
+							left++;
+							right--;
+							break;
+						}
+					}
+				}
+			}else{
+				if(left > right){
+					for(int j = median -1; j >= 0; --j){
+						if(set.find(j) == set.end()){
+							median = j;
+							left = right = left -1;
+							break;
+						}
+					}
+				}else{
+					for(int j = median +1; j < total; ++j){
+						if(set.find(j) == set.end()){
+							median = j;
+							right--;
+							break;
+						}
+					}
+				}
+			
+			}
+			// debug(set, cur, median, left, right);
+		}
+		bitset<60> ans(median);
+		for(int i = m -1, j = 0; j < m; --i, ++j)
+			cout << ans[i];
+		cout << endl;
 
 	}
 	return 0;

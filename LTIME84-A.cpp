@@ -38,50 +38,28 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 /* -------------------------------Solution Sarted--------------------------------------*/
 
-string digi[10] = {"1110111", "0010010", "1011101", "1011011", "0111010", "1101011", "1101111", "1010010", "1111111", "1111011"};
-map <string, int> digs = {{"1110111", 0}, {"0010010", 1}, {"1011101", 2}, {"1011011", 3}, {"0111010", 4}, {"1101011", 5}, {"1101111", 6}, {"1010010", 7}, {"1111111", 8}, {"1111011", 9}};
+vi adj[200005], a, path;
+bool vis[200005];
 int n;
 
-string dp[2005][2005];
-
-string solve(vector <string> &s, int pos, int k){
-	if(k == 0){
-		string ans;
-		for(int i = 0; i < n; ++i){
-			if(digs.find(s[i]) == digs.end()){
-				return "-1";
-			}
-			ans += to_string(digs[s[i]]);
-		}
-		return ans;
-	}else if(pos >= n){
-		return "-1";
+bool dfs(int s, int d){
+	if(s == d){
+		path.push_back(s);
+		return 1;
 	}
 
-	if(dp[pos][k] != "")
-		return dp[pos][k];
-
-	string ans = "-1";
-	for(int i = 9; i >= 0; --i){
-		int cnt = 0;
-		for(int j = 0; j < 7; ++j){
-			if(s[pos][j] != digi[i][j] and s[pos][j] == '0'){
-				cnt++;
-			}else if(s[pos][j] != digi[i][j] and s[pos][j] == '1'){
-				cnt = 5000;
-				break;
+	vis[s] = 1;
+	for(auto itr:adj[s]){
+		if(!vis[itr]){
+			bool is = dfs(itr, d);
+			if(is){
+				path.push_back(s);
+				return 1;
 			}
 		}
-		if(cnt <= k){
-			string temp = s[pos];
-			s[pos] = digi[i];
-			dp[pos][k] = max(dp[pos][k], solve(s, pos +1, k - cnt));
-			s[pos] = temp;
-		}
 	}
-	return dp[pos][k];
+	return 0;
 }
-
 
 int32_t main()
 {
@@ -90,17 +68,44 @@ int32_t main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-
+	int t; cin >> t; while(t--)
 	{
-		int k;
-		cin >> n >> k;
-		vector<string> s(n);
+		int u, v, q;
+		cin >> n >> q;
+		a.clear();
+		a.resize(n +1, 0);
+		scnarr(a, n);
 
-		for(int i = 0; i < n; ++i){
-			cin >> s[i];
+		for(int i = 0; i < n +2; ++i)
+			adj[i].clear();
+
+		for(int i = 0; i < n -1; ++i){
+			cin >> u >> v;
+			adj[u].push_back(v);
+			adj[v].push_back(u);
 		}
 
-		cout << (solve(s, 0, k)) << endl;
+		while(q--){
+			cin >> u >> v;
+			memset(vis, 0, sizeof(vis));
+			path.clear();
+
+			dfs(u, v);
+			vi temp;
+			for(int i = 0; i < path.size(); ++i){
+				temp.push_back(a[path[i] -1]);
+			}
+			sort(all(temp));
+
+			int ans = 1000000000000;
+			for(int i = 0; i < temp.size() -1; ++i){
+				ans = min(ans, temp[i +1] - temp[i]);
+			}
+			cout << ans << endl;
+
+		}
+
+
 
 	}
 	return 0;

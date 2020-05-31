@@ -23,12 +23,15 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
-		cin >> n;
-		vi a(n);
-		scnarr(a, n);
-
+		int n, m;
+		cin >> n >> m;
 		
+		if(m&1){
+			cout << (n * (m/2) + (n/2 + (n&1 ? 1 : 0))) << endl;
+		}else{
+			cout << (n * (m/2)) << endl;		
+		}
+
 
 
 	}

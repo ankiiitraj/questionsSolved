@@ -40,22 +40,23 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 int n, m, a, b, c;
 vi adj[N], p(N);
 
-bool cmp(pii &t1, pii &t2){
-	return t1.first > t2.first;
-}
-
 vi bfs(int src){
 	queue <int> q;
 	q.push(src);
 	vi dist(n +1, -1);
+	bool visited[n +1] = {0};
+	visited[src] = 1;
 	dist[src] = 0; 
 	while(!q.empty()){
 		int cur = q.front();
 		q.pop();
 
 		for(auto itr: adj[cur]){
-			q.push(itr);
-			dist[itr] = dist[cur] +1;
+			if(!visited[itr]){
+				visited[itr] = 1;
+				q.push(itr);
+				dist[itr] = dist[cur] +1;
+			}
 		}
 	}
 	return dist;
@@ -72,11 +73,16 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int x, y, ans = 0;
+		int x, y;
 		cin >> n >> m >> a >> b >> c;
 		p.resize(m, 0);
 		scnarr(p, m);
-		sort(all(p), cmp);
+		sort(all(p));
+		vi pre(m);
+		pre[0] = p[0];
+		for(int i = 1; i < m; ++i){
+			pre[i] = pre[i -1] + p[i];
+		}
 
 		for(int i = 0; i <= n; ++i)
 			adj[i].clear();
@@ -87,12 +93,22 @@ int32_t main()
 			adj[y].push_back(x);
 		}
 
-		vii distA = bfs(a), distB = bfs(b), distC = bfs(c);
-
+		vi distA = bfs(a), distB = bfs(b), distC = bfs(c);
+		// debug(distA, distB, distC);
+		// vi dist = bfs(a);
+		int ans = 1000000000000000000;
 		for(int i = 1; i <= n; ++i){
-			
+			if(distA[i] + distB[i] + distC[i] <= m){
+				int cur = 2*(distB[i] == 0 ? 0 : pre[distB[i] -1]) + (distB[i] + distA[i] + distC[i] == 0 ? 0 : pre[distB[i] -1 + distA[i] + distC[i]]) - (distB[i] == 0 ? 0 : pre[distB[i] -1]);
+				ans = min(ans, cur);
+				// debug(cur, i, distA[i], distB[i], distC[i]);
+			}
+			// cout << distB[i] << " " << distA[i] << " " << distC[i] << endl;
+			// if(i > 10)
+			// 	break;
 		}
-
+		// debug("-----");
+		cout << ans << endl;
 
 	}
 	return 0;

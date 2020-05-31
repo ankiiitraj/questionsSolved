@@ -23,13 +23,28 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
-		cin >> n;
-		vi a(n);
-		scnarr(a, n);
+		int n, m, x, y, ans = 0, sna = 0;
+		cin >> n >> m >> x >> y;
+		string a[n];
+		for(int i = 0; i < n; ++i)
+			cin >> a[i];
 
-		
+		for(int i = 0; i < n; ++i){
+			for(int j = 0; j < m; ++j){
+				if(j != m -1){
+					if(a[i][j] == '.' and a[i][j +1] == '.'){
+						ans += min(2*x, y);
+						++j;
+					}else if(a[i][j] == '.'){
+						ans += x;
+					}
+				}else if(a[i][j] == '.'){
+					ans += x;
+				}
+			}
+		}
 
+		cout << ans << endl;
 
 	}
 	return 0;

@@ -23,13 +23,28 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
+		int n;
 		cin >> n;
 		vi a(n);
 		scnarr(a, n);
+		sort(all(a));
 
-		
-
+		int cnt = 1, ans = 1;
+		for(int i = 0; i < n;){
+			if(cnt < a[i]){
+				ans = cnt;
+				while(cnt < a[i] and i <= n -1){
+					cnt++;
+					++i;
+				}
+				if(i == n and cnt -1 < a[n -1]){
+					break;
+				}
+				ans = cnt;
+			}else	
+				cnt++, ans = cnt, ++i;
+		}
+		cout << ans << endl;
 
 	}
 	return 0;

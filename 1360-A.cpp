@@ -23,12 +23,14 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
-		cin >> n;
-		vi a(n);
-		scnarr(a, n);
-
+		int a, b;
+		cin >> a >> b;
 		
+		if(max(a, b) > 2*min(a, b)){
+			cout << (max(a, b) * max(a, b)) << endl;
+		}else{
+			cout << min({(a + b)*(a + b), (2*min(a, b))*(2*min(a, b))}) << endl;
+		}
 
 
 	}

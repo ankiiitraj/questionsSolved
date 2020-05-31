@@ -23,13 +23,23 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
-		cin >> n;
-		vi a(n);
-		scnarr(a, n);
+		int n, m, k;
+		cin >> n >> m >> k;
 
+		int _max = n/k;
+
+		if(_max >= m){
+			cout << m << endl;
+		}else{
+			int subs;
+			if((m - _max)%(k -1) == 0){
+				subs = (m - _max)/(k -1);
+			}else{
+				subs = (m - _max)/(k -1) +1;
+			}
+			cout << (_max - subs) << endl;
+		}
 		
-
 
 	}
 	return 0;

@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <chrono> 
 #define int long long int
 #define pb push_back
 #define all(a) a.begin(), a.end()
@@ -8,6 +9,7 @@
 #define mii map <int, int>
 #define faster ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
 using namespace std;
+using namespace std::chrono; 
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int N = 1000005; // 1e6 +5
@@ -21,17 +23,18 @@ int32_t main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
+	auto start = high_resolution_clock::now(); 
 	int t; cin >> t; while(t--)
 	{
-		int n, flag = 0;
-		cin >> n;
-		vi a(n);
-		scnarr(a, n);
-
-		
-
-
+		cin >> s;
+		int n = s.lenght();
+		for(int i = 2; i < n -2; ++i){
+			
+		}
 	}
+	auto stop = high_resolution_clock::now(); 
+	auto duration = duration_cast<milliseconds>(stop - start); 
+	// printf("%ld\n", duration.count());
 	return 0;
 }
 

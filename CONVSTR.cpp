@@ -38,51 +38,6 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 /* -------------------------------Solution Sarted--------------------------------------*/
 
-string digi[10] = {"1110111", "0010010", "1011101", "1011011", "0111010", "1101011", "1101111", "1010010", "1111111", "1111011"};
-map <string, int> digs = {{"1110111", 0}, {"0010010", 1}, {"1011101", 2}, {"1011011", 3}, {"0111010", 4}, {"1101011", 5}, {"1101111", 6}, {"1010010", 7}, {"1111111", 8}, {"1111011", 9}};
-int n;
-
-string dp[2005][2005];
-
-string solve(vector <string> &s, int pos, int k){
-	if(k == 0){
-		string ans;
-		for(int i = 0; i < n; ++i){
-			if(digs.find(s[i]) == digs.end()){
-				return "-1";
-			}
-			ans += to_string(digs[s[i]]);
-		}
-		return ans;
-	}else if(pos >= n){
-		return "-1";
-	}
-
-	if(dp[pos][k] != "")
-		return dp[pos][k];
-
-	string ans = "-1";
-	for(int i = 9; i >= 0; --i){
-		int cnt = 0;
-		for(int j = 0; j < 7; ++j){
-			if(s[pos][j] != digi[i][j] and s[pos][j] == '0'){
-				cnt++;
-			}else if(s[pos][j] != digi[i][j] and s[pos][j] == '1'){
-				cnt = 5000;
-				break;
-			}
-		}
-		if(cnt <= k){
-			string temp = s[pos];
-			s[pos] = digi[i];
-			dp[pos][k] = max(dp[pos][k], solve(s, pos +1, k - cnt));
-			s[pos] = temp;
-		}
-	}
-	return dp[pos][k];
-}
-
-
 int32_t main()
 {
 	faster;
@@ -90,17 +45,102 @@ int32_t main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-
+	int t; cin >> t; while(t--)
 	{
-		int k;
-		cin >> n >> k;
-		vector<string> s(n);
+		int n, flag = 0;
+		string a, b;
+		cin >> n >> a >> b;
 
 		for(int i = 0; i < n; ++i){
-			cin >> s[i];
+			if(b[i] > a[i]){
+				flag = 1;
+				break;
+			}
+		}
+		if(flag){
+			cout << -1 << endl;
+			continue;
 		}
 
-		cout << (solve(s, 0, k)) << endl;
+		vector <set<int>> ans;
+		int steps = 0;
+		{
+
+			for(int i = 25; i >= 0; --i){
+				set<int> temp;
+				for(int j = 0; j < n; ++j){
+					if(a[j] == i + 'a'){
+						temp.insert(j);
+						break;
+					}
+				}
+				if(temp.size() == 0){
+					flag = 1;
+				}
+				int cnt = 0;
+				for(int j = 0; j < n; ++j){
+					if(b[j] == (char)('a' + i)){
+						if(a[j] != b[j])
+							cnt++;
+						a[j] = b[j];
+						temp.insert(j);
+					}
+				}
+				debug(a);
+				if(flag and temp.size() > 0){
+					break;
+				}else{
+					flag = 0;
+				}
+				if(cnt != 0){
+					ans.push_back(temp);
+					++steps;
+				}
+			}
+
+			// // for(int i = 0; i < n; ++i){
+			// // 	if(a[i] != b[i]){
+			// // 		for(int j = 0; j < n; ++j){
+			// // 			if(a[j] == b[i]){
+			// // 				temp.insert(j);
+			// // 				break;
+			// // 			}
+			// // 		}
+			// // 		if(temp.size() == 0){
+			// // 			flag = 1;
+			// // 			break;
+			// // 		}
+			// // 		for(int j = 0; j < n; ++j){
+			// // 			if(b[j] == b[i]){
+			// // 				temp.insert(j);
+			// // 				a[j] = b[i];	
+			// // 			}
+			// // 		}
+		
+			// // 		// debug(a, i);
+			// // 		if(temp.size() <= 1){
+			// // 			flag = 1;
+			// // 			break;
+			// // 		}
+			// 	}
+			// }
+			
+			if(a != b or flag){
+				cout << -1 << endl;
+				continue;
+			}
+			cout << steps << endl;
+			for(auto itr: ans){
+				cout << itr.size() << " ";
+				for(auto it: itr){
+					cout << it << " ";
+				}
+				cout << endl;
+			}
+		}
+
+		// debug("--");
+		
 
 	}
 	return 0;
