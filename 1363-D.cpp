@@ -16,7 +16,6 @@ const int N = 1000005; // 1e6 +5
 
 int32_t main()
 {
-	// faster;
 // #ifndef ONLINE_JUDGE
 // 	freopen("ip.txt", "r", stdin);
 // 	freopen("op.txt", "w", stdout);
