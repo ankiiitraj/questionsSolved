@@ -45,26 +45,37 @@ int32_t main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	// int t; cin >> t; while(t--)
 	{
-		int n;
+		int n, sum = 0;
 		cin >> n;
-		vi a(n), ans(n, -1);
+		vi a(n);
+		vi bits(21, 0);
 		scnarr(a, n);
 
-		for(int i = 1; i < n; ++i){
-			if(a[i] != a[i -1]){
-				ans[i] = a[i -1];
+		for(int i = 0; i < n; ++i){
+			bitset<21> temp(a[i]);
+			for(int j = 0; j < 21; ++j){
+				if(temp[j])
+					bits[j]++;
 			}
+
 		}
 
 		for(int i = 0; i < n; ++i){
-			if(ans[i] != -1){
-				for(int j = prev; j < i; ++j){
-					
+			bitset<21> temp;
+			for(int j = 0; j < 21; ++j){
+				if(bits[j]){
+					temp[j] = 1;
+					bits[j]--;
 				}
 			}
+			int num = temp.to_ulong();
+			sum += num*num;
 		}
+
+		cout << sum << endl;
+
 
 	}
 	return 0;

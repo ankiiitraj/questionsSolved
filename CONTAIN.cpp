@@ -138,8 +138,6 @@ int32_t main()
     int count = n;
     while(count > 0){
       if(count < 3){
-        for(int i = 0; i < count; ++i)
-          hulls[hulls.size() -1].push_back(points[i]);
         break;
       }
       temp = convexHull(points, points.size());
@@ -159,62 +157,14 @@ int32_t main()
           points.push_back(ptemp[j]);
         }
       }
-      // cout << endl;
-      // points = ptemp;
       count -= temp.size();
     }
 
-    // for(int i = 0; i < hulls.size(); ++i){
-    //   for(auto &itr: hulls[i]){
-    //     cout << "(" << itr.x << ", " << itr.y << "), ";
-    //   }
-    //   cout << endl;
-    // }
-
     while(q--){
-      int flag = 0;
+      int res = 0;
       cin >> x >> y;
-      for(int i = hulls.size() -1; i >= 0; --i)
+      for(int i = 0; i < hulls.size(); ++i)
       {
-        if(i == hulls.size() -1)
-        {
-          int flag1 = 0;
-          vector<Point> newTemp;
-          for(int j = 0; j < hulls[i].size(); ++j)
-          {
-            if(hulls[i][j].x == x and hulls[i][j].y == y)
-            {
-              flag1 = 1;
-            }
-            else
-            {
-              newTemp.push_back(hulls[i][j]);
-            }
-          }
-          if(flag1)
-          {
-            newTemp = convexHull(newTemp, newTemp.size());
-            int vx[newTemp.size()], vy[newTemp.size()];
-              for(int j = 0; j < newTemp.size(); ++j)
-              {
-                vx[j] = newTemp[j].x;
-                vy[j] = newTemp[j].y;
-              }
-              int ans = lies(newTemp.size(), vx, vy, x, y);
-              if(ans)
-              {
-                cout << i +1 << endl;
-                flag = 1;
-                break;
-              }else{
-                cout << i << endl;
-                flag = 1;
-                break;
-              }
-            }
-          }
-        
-        flag = 0;
         int vx[hulls[i].size()], vy[hulls[i].size()];
         for(int j = 0; j < hulls[i].size(); ++j){
           vx[j] = hulls[i][j].x;
@@ -222,14 +172,10 @@ int32_t main()
         }
         int ans = lies(hulls[i].size(), vx, vy, x, y);
         if(ans){
-          cout << i +1 << endl;
-          flag = 1;
-          break;
+          res++;
         }
       }
-      if(!flag){
-        cout << 0 << endl;
-      }
+        cout << res << endl;
     }
 
   }

@@ -38,6 +38,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 /* -------------------------------Solution Sarted--------------------------------------*/
 
+
 int32_t main()
 {
 	faster;
@@ -49,23 +50,38 @@ int32_t main()
 	{
 		int n;
 		cin >> n;
-		vi a(n), ans(n, -1);
-		scnarr(a, n);
 
-		for(int i = 1; i < n; ++i){
-			if(a[i] != a[i -1]){
-				ans[i] = a[i -1];
+		if(n == 1){
+			cout << "FastestFinger\n";
+		}else if(n&1 or n == 2){
+			cout << "Ashishgup\n";
+		}else{
+			vi factors;
+			int temp = n, cnt = 0;
+			while(temp%2 == 0){
+				temp /= 2;
+				cnt++;
 			}
-		}
-
-		for(int i = 0; i < n; ++i){
-			if(ans[i] != -1){
-				for(int j = prev; j < i; ++j){
-					
+			for(int i = 3; i*i <= temp; ++i){
+				while(temp%i == 0){
+					temp/=i;
+					factors.push_back(i);
 				}
 			}
-		}
+			if(temp > 2){
+				factors.push_back(temp);
+			}
 
+			if(factors.size() == 0){
+				cout << "FastestFinger\n";
+			}else if(factors.size() == 1 and cnt == 1){
+				cout << "FastestFinger\n";
+			}else if(factors.size() == 1 and cnt > 1){
+				cout << "Ashishgup\n";
+			}else{
+				cout << "Ashishgup\n";
+			}
+		}
 	}
 	return 0;
 }

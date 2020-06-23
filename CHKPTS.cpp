@@ -47,24 +47,39 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int n;
-		cin >> n;
-		vi a(n), ans(n, -1);
-		scnarr(a, n);
+		int n, c;
+		cin >> n >> c;
 
-		for(int i = 1; i < n; ++i){
-			if(a[i] != a[i -1]){
-				ans[i] = a[i -1];
-			}
-		}
+		vector<pii> points(n);
+		map<int, vector<pii>> m;
 
 		for(int i = 0; i < n; ++i){
-			if(ans[i] != -1){
-				for(int j = prev; j < i; ++j){
-					
+			cin >> points[i].first >> points[i].second;
+		}
+		for(int i = 0; i < n; ++i){
+			m[points[i].second - points[i].first].push_back({points[i].first,points[i].second});
+		}
+
+		int steps = 0, checkpoints = 0;
+
+		for(auto itr: m){
+			vector<pii> temp = itr.second;
+			map<int, vector<int>> new_map;
+			for(auto vitr: temp){
+				new_map[(c + (vitr.first%c))%c].push_back(vitr.first);
+			}
+			checkpoints += new_map.size();
+			for(auto mitr: new_map){
+				sort(all(mitr.second));
+				int mid = mitr.second.size()&1 ? mitr.second.size()/2 : mitr.second.size()/2 -1;
+
+				for(auto sitr: mitr.second){
+					steps += (abs(sitr - (mitr.second[mid])))/c;
 				}
 			}
+
 		}
+		cout << checkpoints << " " << steps << endl;
 
 	}
 	return 0;

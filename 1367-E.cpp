@@ -38,6 +38,41 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 /* -------------------------------Solution Sarted--------------------------------------*/
 
+bool cmp(const pair<int, char>& a, const pair<int, char>& b){
+	return a.first > b.first;
+}
+
+void solve(){
+	int n, k;
+	map<char, int> tempMap;
+	vector<pair<int, char>> m;
+	string s;
+
+	cin >> n >> k >> s;
+	for(auto itr: s){
+		tempMap[itr]++;
+	}
+
+	for(auto &itr: tempMap){
+		m.push_back({itr.second, itr.first});
+	}
+	sort(all(m), cmp);
+	int ans = -1;
+
+	for(int i = 1; i <= n; i++){
+		int cnt = 0;
+		for(auto itr: m){
+			cnt += itr.first/(i/__gcd(k, i));
+		}
+		if(cnt >= __gcd(i, k)){
+			ans = max(ans, i);
+		}
+	}
+	cout << ans << endl;
+
+
+}
+
 int32_t main()
 {
 	faster;
@@ -45,33 +80,15 @@ int32_t main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
-	{
-		int n;
-		cin >> n;
-		vi a(n), ans(n, -1);
-		scnarr(a, n);
-
-		for(int i = 1; i < n; ++i){
-			if(a[i] != a[i -1]){
-				ans[i] = a[i -1];
-			}
-		}
-
-		for(int i = 0; i < n; ++i){
-			if(ans[i] != -1){
-				for(int j = prev; j < i; ++j){
-					
-				}
-			}
-		}
-
-	}
+	int t; 
+	cin >> t; 
+	while(t--)
+		solve();
 	return 0;
 }
 
 
-//Author : Ankit Raj
+//Author : Ankit Raj 
 //InSearchForMeanings
 //Problem Link :
 	

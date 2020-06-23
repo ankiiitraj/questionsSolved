@@ -15,8 +15,6 @@ const int N = 1000005; // 1e6 +5
 
 /* -------------------------------Solution Sarted--------------------------------------*/
 int spf[MAXN]; 
-  
-vector<pii> ans;
 
 void sieve() 
 { 
@@ -38,7 +36,7 @@ void sieve()
     } 
 } 
 
-void getFactorization(int x) 
+int getFactorization(int x) 
 { 
     set<int> ret; 
     bool flag = 0;
@@ -52,11 +50,8 @@ void getFactorization(int x)
         }
         x = x / spf[x]; 
     }
-    if(flag){
-    	ans.push_back({*ret.begin(), temp});
-    }else{
-    	ans.push_back({-1, -1});
-    }
+
+    return (*ret.begin());
 
 } 
 
@@ -70,27 +65,40 @@ int32_t main()
 #endif
 	// int t; cin >> t; while(t--)
 	{
-		int a[2] = {0, 1}, b[2];
-		b = a;
-		cout << b[0] << b[1] << endl;
-		// sieve();
-		// int n;
-		// cin >> n;
-		// vi a(n);
-		// ans.clear();
-		// scnarr(a, n);
-		
-		// for(int i = 0; i < n; ++i){
-		// 	getFactorization(a[i]);
-		// }
-
-		// for(auto &itr: ans){
-		// 	cout << itr.first << " ";
-		// }
-		// cout << endl;
-		// for(auto &itr: ans){
-		// 	cout << itr.second << " ";
-		// }
+		sieve();
+		int n;
+		cin >> n;
+		vi a(n);
+		scnarr(a, n);
+		vector<pii> ans;
+		for(auto itr: a){
+			if(itr&1){
+				int i = getFactorization(itr);
+				while(itr%i == 0){
+					itr /= i;
+				}
+				if(itr != 1){
+					ans.push_back({i, itr});
+				}else{
+					ans.push_back({-1, -1});
+				}
+			}else{
+				while(itr%2 == 0){
+					itr /= 2;
+				}
+				if(itr != 1){
+					ans.push_back({2, itr});
+				}else{
+					ans.push_back({-1, -1});
+				}
+			}
+		}
+		for(auto itr: ans)
+			cout << itr.first << " ";
+		cout << endl;
+		for(auto itr: ans)
+			cout << itr.second << " ";
+		cout << endl;
 
 	}
 	return 0;

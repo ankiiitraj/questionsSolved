@@ -11,6 +11,7 @@ using namespace std;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int N = 1000005; // 1e6 +5
+const int INF = 1000005; // 1e6 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -45,33 +46,67 @@ int32_t main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	int test; cin >> test; while(test--)
 	{
-		int n;
-		cin >> n;
-		vi a(n), ans(n, -1);
-		scnarr(a, n);
-
-		for(int i = 1; i < n; ++i){
-			if(a[i] != a[i -1]){
-				ans[i] = a[i -1];
+		string s, u;
+		int freq[26] = {0};
+		cin >> s;
+		int n = s.length(), m;
+		cin >> m;
+		string t(m, '_');
+		vi b(m), c(m, INF);
+		scnarr(b, m);
+		sort(all(s));
+		reverse(all(s));
+		for(auto itr: s){
+			freq[itr - 'a']++;
+			if(freq[itr - 'a'] == 1){
+				u += itr;
 			}
 		}
+		// cout << u << endl;
+		while(b != c){
+			int cnt = 0;
+			vi zeroes;
+			for(int i = 0; i < m; ++i){
+				if(b[i] == 0){
+					b[i] = INF;
+					cnt++;
+					zeroes.push_back(i);
+				}
 
-		for(int i = 0; i < n; ++i){
-			if(ans[i] != -1){
-				for(int j = prev; j < i; ++j){
-					
+			}
+			debug(b);
+			for(int i = 25; i >= 0; --i){
+				if(freq[i] >= cnt){
+					for(auto itr: zeroes)
+						t[itr] = (char)(i + 'a');
+					freq[i] = 0;
+					break;
+				}
+				freq[i] = 0;
+			}
+			for(auto itr: zeroes){
+				for(int i = 0; i < m; ++i){
+					if(b[i] != INF){
+						b[i] -= abs(i - itr);
+					}
 				}
 			}
+
 		}
+
+		cout << t << endl;
+
+
 
 	}
 	return 0;
 }
+// lojemgnegj
 
 
 //Author : Ankit Raj
 //InSearchForMeanings
 //Problem Link :
-	
+	 
