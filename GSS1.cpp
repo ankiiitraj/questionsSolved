@@ -86,10 +86,10 @@ void solve(){
 signed main()
 {
 	faster;
-#ifndef ONLINE_JUDGE
-	freopen("ip.txt", "r", stdin);
-	freopen("op.txt", "w", stdout);
-#endif
+	#ifndef ONLINE_JUDGE
+		freopen("ip.txt", "r", stdin);
+		freopen("op.txt", "w", stdout);
+	#endif
 	// int t; cin >> t; while(t--)
 		solve();
 	return 0;

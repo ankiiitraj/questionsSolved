@@ -1,47 +1,105 @@
 #include <bits/stdc++.h>
-#define int long long int
-#define len length
-#define pb push_back
-#define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
-#define vi vector<int>
-#define pii pair <int, int>
-#define mii map <int, int>
-#define faster ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define ll long long
 using namespace std;
-//Constants
-const int MOD = 998244353; // 1e9 + 7
-const int N = 1000005; // 1e6 +5
 
-/* -------------------------------Solution Sarted--------------------------------------*/
-
-int power(int x, int y){
-	if(y == 0)
-		return 1;
-	if(y&1){
-		return (x*power(x, y -1))%MOD;
-	}
-	int temp = power(x, y/2)%MOD;
-	return (temp*temp)%MOD;
+stack<ll> makeItEmpty(stack<ll> in){
+    stack<ll> temp;
+    in.swap(temp);
+    return in;
 }
 
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    ll n,q;
+    cin>>n>>q;
+    ll h[n], s[n], rSum[n], lSum[n], left[n], right[n];
+    for(ll i=0;i<n;i++)
+        cin>>h[i];
+    for(ll j=0;j<n;j++)
+        cin>>s[j];
+    stack<ll> se1, se2;
+    for(ll i=n-1;i>=0;i--){
+        rSum[i]=s[i];
+        while(!se1.empty()&&h[se1.top()]<=h[i])
+            se1.pop();
+        if(!se1.empty())
+            rSum[i]+=rSum[se1.top()];
+        se1.push(i);
+    }
+    for(int i=0;i<n;i++){
+        lSum[i]=s[i];
+        while(!se2.empty()&&h[se2.top()]<=h[i])
+            se2.pop();
 
-int32_t main()
-{
-	faster;
-#ifndef ONLINE_JUDGE
-	freopen("ip.txt", "r", stdin);
-	freopen("op.txt", "w", stdout);
-#endif
+        if(!se2.empty())
+            lSum[i]+=lSum[se2.top()];
+
+        se2.push(i);
+    }
+    se1= makeItEmpty(se1);
+    se2= makeItEmpty(se2);
+    for(ll i=n-1;i>=0;i--){
+        while(!se1.empty()&&h[se1.top()]<h[i])
+            se1.pop();
+        right[i]= (se1.empty()) ? n: se1.top();
+        se1.push(i);
+    }
+    for(int i=0;i<n;i++){
+        while(!se2.empty()&&h[se2.top()]<h[i])
+            se2.pop();
+        left[i]= (se2.empty()) ? -1: se2.top();
+        se2.push(i);
+    }
+
+     while(q--){
+        ll t, a, b;
+        cin>>t>>a>>b;
+        if(t==1){
+            s[a-1]=b;
+            se1= makeItEmpty(se1);
+            se2= makeItEmpty(se2);
+            for(ll i=n-1;i>=0;i--){
+                rSum[i]=s[i];
+                while(!se1.empty()&&h[se1.top()]<=h[i])
+                    se1.pop();
+                if(!se1.empty())
+                    rSum[i]+=rSum[se1.top()];
+                se1.push(i);
+            }
+            for(int i=0;i<n;i++){
+                lSum[i]=s[i];
+                while(!se2.empty()&&h[se2.top()]<=h[i])
+                    se2.pop();
+
+                if(!se2.empty())
+                    lSum[i]+=lSum[se2.top()];
+
+                
+            }
+        }
+        else{
+            a--;
+            b--;
+            if(a==b){
+                cout<<s[a]<<"\n";
+                continue;
+            }
+            
+            if(abs(b-a)==1){
+                cout<<s[a]+s[b]<<"\n";
+                continue;
+            }
+            if(a > b){
+                cout<<rSum[b]-rSum[a]+s[a]<<"\n";
+
+            }else if(a<b){
+              
+                cout<<lSum[b]-lSum[a]+s[a]<<"\n";
+            }
+        }
+     }
 
 
-	cout << p*(power(16,))
-	
-	return 0;
+    return 0;
 }
-
-
-//Author : Ankit Raj
-//InSearchForMeanings
-//Problem Link :
-	

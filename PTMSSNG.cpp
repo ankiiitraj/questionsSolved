@@ -1,18 +1,8 @@
-#include <bits/stdc++.h>
-#define int long long int
-#define pb push_back
-#define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
-#define vi vector<int>
-#define pii pair <int, int>
-#define mii map <int, int>
-#define faster ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#include<bits/stdc++.h>
 using namespace std;
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int N = 1000005; // 1e6 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
+void __print(long long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
 void __print(unsigned long x) {cerr << x;}
 void __print(unsigned long long x) {cerr << x;}
@@ -36,39 +26,42 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
-/* -------------------------------Solution Sarted--------------------------------------*/
 
-int32_t main()
+struct point{
+	long long x, y;
+};
+
+int main()
 {
-	faster;
 #ifndef ONLINE_JUDGE
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	int t;
+	scanf("%d", &t);
+	for(int test = 0; test < t; ++test)
 	{
-		int n, k;
-		string s;
-		int ans = 0, total = 0;
-		cin >> n >> k >> s;
-		s = 'a' + s;
-		vi prefix(n +1, 0);
-		for(int i = 1; i <= n; ++i)
-			prefix[i] = prefix[i -1] + s[i] - '0';
-
-
-		for(int i = 1; i <= n; ++i){
-			dp[i] = min(dp[i - k], prefix[i -1] - prefix[i - k -1])
+		long long n, x, y; 
+		scanf("%lld", &n);
+		vector<point> points;
+		map<long long, long long> x_axis, y_axis;
+		for(long long i = 0; i < 4*n -1; ++i){
+			scanf("%lld%lld", &x, &y);
+			points.push_back({x, y});
+			x_axis[x]++; y_axis[y]++;
 		}
 
+		for(auto itr: x_axis){
+			if(itr.second&1)
+				x = itr.first;
+		}
+		for(auto itr: y_axis){
+			if(itr.second&1)
+				y = itr.first;
+		}
+
+		cout << x << " " << y << endl;
 
 
 	}
-	return 0;
 }
-
-
-//Author : Ankit Raj
-//InSearchForMeanings
-//Problem Link :
-	
