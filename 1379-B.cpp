@@ -1,17 +1,18 @@
-//TREEDIFF
 #include <bits/stdc++.h>
+#include <time.h>
 #define int long long int
 #define pb push_back
 #define all(a) a.begin(), a.end()
 #define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
+#define si set<int>
 #define pii pair <int, int>
+#define sii set<pii>
+#define vii vector<pii>
 #define mii map <int, int>
 #define faster ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
 using namespace std;
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int N = 1000005; // 1e6 +5
+using namespace chrono;
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -37,32 +38,34 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
+/*
+	Things to remember : check for coners n = 1, pass references instead
+*/
 /* -------------------------------Solution Sarted--------------------------------------*/
 
-vi adj[200005], a, path;
-bool vis[200005];
-int n;
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
 
-bool dfs(int s, int d){
-	if(s == d){
-		path.push_back(s);
-		return 1;
-	}
+void solve(){
+	int l, r, m;
+	cin >> l >> r >> m;
 
-	vis[s] = 1;
-	for(auto itr:adj[s]){
-		if(!vis[itr]){
-			bool is = dfs(itr, d);
-			if(is){
-				path.push_back(s);
-				return 1;
+	{
+		for(int i = l; i <= r; ++i){
+			if(l + i - m%i <= r){
+				cout << i << " " << l << " " << l + (i - m%i) << endl;
+				break;
+			}else if(r - m%i >= l){
+				cout << i << " " << r << " " << r - m%i << endl;
+				break;
 			}
 		}
 	}
-	return 0;
+		
 }
 
-int32_t main()
+signed main()
 {
 	faster;
 #ifndef ONLINE_JUDGE
@@ -70,50 +73,23 @@ int32_t main()
 	freopen("op.txt", "w", stdout);
 #endif
 	int t; cin >> t; while(t--)
-	{
-		int u, v, q;
-		cin >> n >> q;
-		a.clear();
-		a.resize(n +1, 0);
-		scnarr(a, n);
-
-		for(int i = 0; i < n +2; ++i)
-			adj[i].clear();
-
-		for(int i = 0; i < n -1; ++i){
-			cin >> u >> v;
-			adj[u].push_back(v);
-			adj[v].push_back(u);
-		}
-
-		while(q--){
-			cin >> u >> v;
-			memset(vis, 0, sizeof(vis));
-			path.clear();
-
-			dfs(u, v);
-			vi temp;
-			for(int i = 0; i < path.size(); ++i){
-				temp.push_back(a[path[i] -1]);
-			}
-			sort(all(temp));
-
-			int ans = 1000000000000;
-			for(int i = 0; i < temp.size() -1; ++i){
-				ans = min(ans, temp[i +1] - temp[i]);
-			}
-			cout << ans << endl;
-
-		}
-
-
-
-	}
+		solve();
 	return 0;
 }
 
 
 //Author : Ankit Raj
-//InSearchForMeanings
 //Problem Link :
+
+/*Snippets*/
+/*
+sieve - prime factorization using sieve and primes in range
+zpower - pow with mod
+plate - Initial template
+bfs 
+dfs
+fenwik - BIT
+binary_search
+segment_tree
+*/
 	

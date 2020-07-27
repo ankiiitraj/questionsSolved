@@ -14,32 +14,70 @@
 using namespace std;
 using namespace chrono;
 /*
-    Things to remember : check for coners n = 1, pass references instead
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
+
+int lcm(int a, int b){
+	return (a*b)/__gcd(a, b);
+}
 
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
+vi adj[105];
+vi nodes(105);
+int n;
+bool visited[105];
+void dfs(int i, int d, int cur){
+	visited[i] = 1;
+	for(auto itr: adj[i]){
+		if(!visited[itr]){
+			if(cur%(d + 1) == 0)
+				dfs(itr, d +1, cur);
+			else{
+				nodes[itr] = lcm((d +1), nodes[itr]);
+				dfs(itr, d +1, nodes[itr]);
+			}
+		}
+	}
+}
+
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    scnarr(a, n);
-    
+	int x, y;
+	cin >> n;
+	nodes.assign(n +1, 1);
+	for(int i = 0; i <= n; ++i)
+		adj[i].clear();
+	for(int i = 0; i < n -1; ++i){
+		cin >> x >> y;
+		adj[x].push_back(y);
+		adj[y].push_back(x);
+	}
+
+	for(int  i = 1; i <= n; ++i){
+		memset(visited, 0, sizeof(visited));
+		dfs(i, 1, nodes[i]);
+	}
+
+	for(int i = 1; i <= n; ++i)
+		cout << nodes[i] << " ";
+	cout << endl;
+
+	
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int t; cin >> t; while(t--)
-        solve();
-    return 0;
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 
@@ -57,4 +95,4 @@ fenwik - BIT
 binary_search
 segment_tree
 */
-    
+	

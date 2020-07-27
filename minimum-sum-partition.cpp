@@ -19,15 +19,55 @@ using namespace chrono;
 /* -------------------------------Solution Sarted--------------------------------------*/
 
 //Constants
-const int MOD = 1000000007; // 1e9 + 7
+const int INF = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
+int dp[51][10005];
+int recurse(vi &a, int pos, int sum, int n, int total){
+    if(pos >= n){
+        return abs(sum - (total - sum));
+    }
+    if(dp[pos][sum] != -1)
+        return dp[pos][sum];
+    return dp[pos][sum] = min(recurse(a, pos +1, sum + a[pos], n, total), recurse(a, pos +1, sum, n, total));
+}
+
 
 void solve(){
     int n;
     cin >> n;
     vi a(n);
     scnarr(a, n);
-    
+    int total = 0;
+    a.insert(a.begin(), -1);
+    memset(dp, -1, sizeof dp);
+    for(int i = 0; i < n; ++i){
+        total += a[i +1];
+    }
+    int memo[n +1][total +1];
+
+    for(int i = 0; i <= n; ++i){
+        for(int j = 0; j <= total; ++j)
+            memo[i][j] = 0;
+    }
+
+    memo[0][0] = 1;
+    for(int i = 1; i <= n; ++i){
+        for(int j = 0; j <= total; ++j){
+            if(j - a[i] >= 0){
+                memo[i][j] = memo[i -1][j] or memo[i -1][j - a[i]];
+            }else{
+                memo[i][j] = memo[i -1][j];
+            }        
+        }
+    }
+
+    int ans = 10*INF;
+    for(int i = 0; i <= total; ++i){
+        if(memo[n][i])
+            ans = min(ans, abs(total - 2*i));
+    }
+    cout << ans << endl;
+    // cout << recurse(a, 0, 0, n, total) << endl;
 }
 
 signed main()

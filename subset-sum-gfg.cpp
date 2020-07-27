@@ -21,22 +21,37 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
+int dp[101][100001];
+
+bool recurse(vector<int> &a, int pos, int sum, int total, int n){
+    if(pos >= n){
+        return sum == total - sum;
+    }
+    if(dp[pos][sum] != -1)
+        return dp[pos][sum];
+    return (dp[pos][sum] = (recurse(a, pos +1, sum + a[pos], total, n) or recurse(a, pos +1, sum, total, n)));
+    
+}
 
 void solve(){
     int n;
     cin >> n;
     vi a(n);
     scnarr(a, n);
-    
+    memset(dp, -1, sizeof(dp));
+    int total = 0;
+    for(int i = 0; i < n; ++i)
+        total += a[i];
+    recurse(a, 0, 0, total, n) ? cout << "YES\n" : cout << "NO\n";
 }
 
 signed main()
 {
     faster;
-#ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
-#endif
+// #ifndef ONLINE_JUDGE
+//     freopen("ip.txt", "r", stdin);
+//     freopen("op.txt", "w", stdout);
+// #endif
     int t; cin >> t; while(t--)
         solve();
     return 0;

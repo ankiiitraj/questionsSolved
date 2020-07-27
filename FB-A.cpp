@@ -14,7 +14,7 @@
 using namespace std;
 using namespace chrono;
 /*
-    Things to remember : check for coners n = 1, pass references instead
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
@@ -22,24 +22,61 @@ using namespace chrono;
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 
-void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    scnarr(a, n);
-    
+string solve(){
+	int n;
+	string I, O;
+	cin >> n >> I >> O;
+
+	string res;
+
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < n; ++j){
+			if(i == j){
+				res += 'Y';
+			}else if(i < j){
+				bool flag = 0;
+				for(int k = i; k < j; ++k){
+					if(O[k] == 'N' or I[k +1] == 'N'){
+						res += 'N';
+						flag = 1;
+						break;
+					}
+				}
+				if(!flag){
+					res += 'Y';
+				}
+			}else{
+				bool flag = 0;
+				for(int k = i; k > j; --k){
+					if(O[k] == 'N' or I[k -1] == 'N'){
+						res += 'N';
+						flag = 1;
+						break;
+					}
+				}
+				if(!flag){
+					res += 'Y';
+				}
+			}
+		}
+		res += '\n';
+	}
+	res.pop_back();
+	return res;
+
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int t; cin >> t; while(t--)
-        solve();
-    return 0;
+	int t; cin >> t; for(int test = 1; test <= t; ++test){
+		cout << "Case #" << test << ":\n" <<  solve() << endl;
+	}
+	return 0;
 }
 
 
@@ -57,4 +94,4 @@ fenwik - BIT
 binary_search
 segment_tree
 */
-    
+	

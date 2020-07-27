@@ -1,4 +1,3 @@
-//TREEDIFF
 #include <bits/stdc++.h>
 #define int long long int
 #define pb push_back
@@ -39,29 +38,6 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 /* -------------------------------Solution Sarted--------------------------------------*/
 
-vi adj[200005], a, path;
-bool vis[200005];
-int n;
-
-bool dfs(int s, int d){
-	if(s == d){
-		path.push_back(s);
-		return 1;
-	}
-
-	vis[s] = 1;
-	for(auto itr:adj[s]){
-		if(!vis[itr]){
-			bool is = dfs(itr, d);
-			if(is){
-				path.push_back(s);
-				return 1;
-			}
-		}
-	}
-	return 0;
-}
-
 int32_t main()
 {
 	faster;
@@ -71,43 +47,69 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		int u, v, q;
-		cin >> n >> q;
-		a.clear();
-		a.resize(n +1, 0);
-		scnarr(a, n);
+		int n, k;
+		string s, temp, ans;
+		cin >> n >> k >> s;
+		vector <string> v(k);
 
-		for(int i = 0; i < n +2; ++i)
-			adj[i].clear();
+		sort(all(s));
 
-		for(int i = 0; i < n -1; ++i){
-			cin >> u >> v;
-			adj[u].push_back(v);
-			adj[v].push_back(u);
+		for(int i = 0; i < n; i++){
+			v[i%k] += s[i];
 		}
-
-		while(q--){
-			cin >> u >> v;
-			memset(vis, 0, sizeof(vis));
-			path.clear();
-
-			dfs(u, v);
-			vi temp;
-			for(int i = 0; i < path.size(); ++i){
-				temp.push_back(a[path[i] -1]);
+		
+		sort(all(v));
+		// debug(v);
+		bool flag = 0;
+		int idx = -1;
+		for(int i = 0; i < n/k; ++i){
+			for(int j = 0; j < k -1; ++j){
+				if(v[j][i] != v[j +1][i]){
+				// cout << v[j][i] << " " << v[j +1][i] << endl;
+					flag = 1;
+					break;
+				}
 			}
-			sort(all(temp));
-
-			int ans = 1000000000000;
-			for(int i = 0; i < temp.size() -1; ++i){
-				ans = min(ans, temp[i +1] - temp[i]);
-			}
-			cout << ans << endl;
+			if(flag)
+				break;
+			idx = i;
+			ans += v[k -1][i];
 
 		}
+		if((int)(v[k -1].length() -1) > idx){
+			ans += v[k -1][idx +1];
+		}
+		if(ans.length() > 1){
+			for(int i = 0; i < k -1; ++i){
+				if(idx +1 <= v[i].length() -1 and v[i][idx +1] < ans[idx +1]){
+					ans += v[i][idx +1];
+				}else if(idx == v[i].length() -1 and v[i][idx] < ans[idx +1]){
+					ans += v[i][idx];
+				}
+			}
+		}
+		// ans += v[k -1][v[k -1].length() -1];
+	
+		// }else{
+		// 	for(int i = 0; i < k; ++i){
+		// 		if(v[i][idx] < v[k -1][idx]){
+		// 			v[k -1] += v[i][idx];
+		// 		}
+		// 	}
+		// }
 
 
+		// for(int i = 0; i )
 
+		// for(int i = 0; i < k -1; ++i){
+		// 	if(v[i].length() > 1LL){
+		// 		temp += v[i][v[i].length() -1];
+		// 	}
+		// }
+
+		sort(all(ans));
+		// int end = ans.length() -1;
+		cout << ans << endl;
 	}
 	return 0;
 }

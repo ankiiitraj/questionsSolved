@@ -23,20 +23,37 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    scnarr(a, n);
+    int n, W;
+    cin >> n >> W;
+    vi v(n), w(n);
+    vector<pair<double, pair<int, int>>> ratios;
+    for(int i = 0; i < n; ++i){
+        cin >> v[i] >> w[i];
+        ratios.push_back({(double)((v[i]*1.00)/(w[i]*1.00)), {v[i], w[i]}});
+    }
+    sort(all(ratios));
+    double ans = 0.00;
+    for(int itr = n -1; itr >= 0; --itr){
+        if(ratios[itr].second.second*1.00 <= W){
+            ans += ratios[itr].second.first*1.00;
+            W -= ratios[itr].second.second*1.00;
+        }else{
+            ans += (W)*(ratios[itr].first)*1.00;
+            break;
+        }
+    }
+    cout << ans << endl;
     
 }
 
 signed main()
 {
     faster;
-#ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
-#endif
+// #ifndef ONLINE_JUDGE
+//     freopen("ip.txt", "r", stdin);
+//     freopen("op.txt", "w", stdout);
+// #endif
+    cout << fixed << setprecision(2);
     int t; cin >> t; while(t--)
         solve();
     return 0;

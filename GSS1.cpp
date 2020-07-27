@@ -22,6 +22,20 @@ struct node{
 	int sum, prefix, suffix;
 };
 
+int power(int x, int y){
+	int ans = 1;
+	while(y > 0){
+		if(y&1){
+			ans = (ans * x)%MOD;
+			--y;
+		}else{
+			x = (x * x)%MOD;
+			y /= 2;
+		}
+	}
+	return ans;
+}
+
 node kadeanes_pre_suf(vi &a, int l, int r){
 	node res;
 	int cur = 0, tot = -MOD, pre = 0, suf = 0;
