@@ -3,7 +3,7 @@
 #define int long long int
 #define pb push_back
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -21,42 +21,42 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-int dp[1005][1005];
-int recurse(vi &a, int pos, int prev){
-    if(pos < 0){
+const int INF = 100000000000005; // 1e15 +5
+
+int rec(int n, int a[], int dp[]){
+    if(n == 0){
         return 0;
+    }else if(n < a[0]){
+        return -INF;   
     }
-    if(dp[pos][prev] != -1)
-        return dp[pos][prev];
-    return dp[pos][prev] = max(a[pos] < a[prev] ? 1+ recurse(a, pos -1, pos) : 0, recurse(a, pos -1, prev));
+    
+    if(dp[n] != -1)
+        return dp[n];
+    
+    return dp[n] = max({rec(n - a[0], a, dp) +1, rec(n - a[1], a, dp) +1, rec(n - a[2], a, dp) +1});
+    
+}
+
+int iterate(int n, int a[]){
+    int dp[n +1] = {0};
+    for(int i = 1; i <= n; ++i){
+        if(i >= a[0]){
+            dp[i] = max({dp[i - a[0]] +1, i - a[1] >= 0 ? dp[i - a[1]] +1 : -INF, i - a[2] >= 0 ? dp[i - a[2]] +1 : -INF});
+        }else{
+            dp[i] = -INF;
+        }
+    }
+    return dp[n];
 }
 
 void solve(){
-    int n;
-    memset(dp, 0, sizeof dp);
-    cin >> n;
-    vi a(n);
-    scnarr(a, n);
-    // a.push_back(1000);
-    // cout << recurse(a, n -1, n) << endl;
-    a.insert(a.begin(), -1);
-    // for(int i = 0; i <= n; ++i)
-    //     dp[i][0] = 1;
-    int lis[n +1];
-    lis[1] = 1;
-    for(int i = 2; i <= n; ++i){
-        lis[i] = 1;
-        for(int j = 1; j < i; ++j){
-            if(a[i] > a[j]){
-                lis[i] = max(lis[i], lis[j] +1);
-            }
-        }
-    }
-    int ans = 1;
-    for(int i = 1; i <= n; ++i){
-        ans = max(ans, lis[i]);
-    }
-    cout << ans << endl;
+    int n, a[3];
+    cin >> n >> a[0] >> a[1] >> a[2];
+    int dp[n +1];
+    memset(dp, -1, sizeof dp);
+    sort(a, a +3);
+    // cout << rec(n, a, dp) << endl;
+    cout << iterate(n, a) << endl;
     
 }
 

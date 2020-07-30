@@ -21,52 +21,57 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-int dp[1005][1005];
-int recurse(vi &a, int pos, int prev){
-    if(pos < 0){
+int memo[101][101];
+int rodCuttingRecursive(vi &a, int pos, int cur_length){
+    if(pos <= 0 or cur_length == 0){
         return 0;
     }
-    if(dp[pos][prev] != -1)
-        return dp[pos][prev];
-    return dp[pos][prev] = max(a[pos] < a[prev] ? 1+ recurse(a, pos -1, pos) : 0, recurse(a, pos -1, prev));
+    
+    if(memo[pos][cur_length] != -1)
+        return memo[pos][cur_length];
+    
+    if(pos <= cur_length){
+        return memo[pos][cur_length] = max(rodCuttingRecursive(a, pos, cur_length - pos) + a[pos], rodCuttingRecursive(a, pos -1, cur_length));
+    }else{
+        return memo[pos][cur_length] = rodCuttingRecursive(a, pos -1, cur_length);
+    }
+    
+}
+
+int rodCuttingItterative(vi &a, int n){
+    if(n == 1){
+        return a[1];
+    }
+    int ans = 0;
+    int dp[n +1] = {0};
+    dp[1] = a[1];
+    for(int i = 2; i <= n; ++i){
+        for(int j = 1; j <= i; ++j){
+            dp[i] = max(dp[i - j] + a[j], dp[i]);
+            ans = max(dp[i], ans);
+        }
+    }
+    return ans;
 }
 
 void solve(){
     int n;
-    memset(dp, 0, sizeof dp);
     cin >> n;
+    memset(memo, -1, sizeof memo);
     vi a(n);
     scnarr(a, n);
-    // a.push_back(1000);
-    // cout << recurse(a, n -1, n) << endl;
     a.insert(a.begin(), -1);
-    // for(int i = 0; i <= n; ++i)
-    //     dp[i][0] = 1;
-    int lis[n +1];
-    lis[1] = 1;
-    for(int i = 2; i <= n; ++i){
-        lis[i] = 1;
-        for(int j = 1; j < i; ++j){
-            if(a[i] > a[j]){
-                lis[i] = max(lis[i], lis[j] +1);
-            }
-        }
-    }
-    int ans = 1;
-    for(int i = 1; i <= n; ++i){
-        ans = max(ans, lis[i]);
-    }
-    cout << ans << endl;
-    
+    // cout << rodCuttingRecursive(a, n, n) << endl;
+    cout << rodCuttingItterative(a, n) << endl;
 }
 
 signed main()
 {
     faster;
-// #ifndef ONLINE_JUDGE
-//     freopen("ip.txt", "r", stdin);
-//     freopen("op.txt", "w", stdout);
-// #endif
+#ifndef ONLINE_JUDGE
+    freopen("ip.txt", "r", stdin);
+    freopen("op.txt", "w", stdout);
+#endif
     int t; cin >> t; while(t--)
         solve();
     return 0;

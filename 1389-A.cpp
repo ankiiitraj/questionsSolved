@@ -14,33 +14,36 @@
 using namespace std;
 using namespace chrono;
 /*
-    Things to remember : check for coners n = 1, pass references instead
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    scnarr(a, n);
-    
+	int l, r;
+	cin >> l >> r;
+
+	if(r < 2*l){
+		cout << "-1 -1\n";
+	}else{
+		cout << l << " " << 2*l << endl;
+	}
+	
 }
 
 signed main()
 {
-    faster;
-// #ifndef ONLINE_JUDGE
-//     freopen("ip.txt", "r", stdin);
-//     freopen("op.txt", "w", stdout);
-// #endif
-    int t; cin >> t; while(t--)
-        solve();
-    return 0;
+	faster;
+#ifndef ONLINE_JUDGE
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
+#endif
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 
@@ -58,4 +61,4 @@ fenwik - BIT
 binary_search
 segment_tree
 */
-    
+	

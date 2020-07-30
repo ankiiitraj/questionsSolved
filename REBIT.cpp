@@ -25,66 +25,6 @@ int power(int x, int y){
 	return (temp*temp)%MOD;
 }
 
-string InfixToPostfix(string expression)
-{
-	// Declaring a Stack from Standard template library in C++. 
-	stack<char> S;
-	string postfix = ""; // Initialize postfix as empty string.
-	for(int i = 0;i< expression.length();i++) {
-
-		// Scanning each character from left. 
-		// If character is a delimitter, move on. 
-		if(expression[i] == ' ' || expression[i] == ',') continue; 
-
-		// If character is operator, pop two elements from stack, perform operation and push the result back. 
-		else if(expression[i] == '&' or expression[i] == '|' or expression[i] == '^') 
-		{
-			while(!S.empty() && S.top() != '(')
-			{
-				postfix+= S.top();
-				S.pop();
-			}
-			S.push(expression[i]);
-		}
-		// Else if character is an operand
-		else if(expression[i] == '#')
-		{
-			postfix +=expression[i];
-		}
-
-		else if (expression[i] == '(') 
-		{
-			S.push(expression[i]);
-		}
-
-		else if(expression[i] == ')') 
-		{
-			while(!S.empty() && S.top() !=  '(') {
-				postfix += S.top();
-				S.pop();
-			}
-			S.pop();
-		}
-	}
-
-	while(!S.empty()) {
-		postfix += S.top();
-		S.pop();
-	}
-
-	return postfix;
-}
-
-
-
-struct score
-{
-	int z, o, a, A;
-	score(){
-		z = o = a = A = 748683265;
-	}
-};
-
 int32_t main()
 {
 	faster;
@@ -94,37 +34,85 @@ int32_t main()
 #endif
 	int t; cin >> t; while(t--)
 	{
-		string s, postfix;
+		string s;
 		cin >> s;
 		int n = s.length();
-		
-		postfix = InfixToPostfix(s);
-		// cout << postfix << endl;
-		score *Score = new score();
-		for(auto itr:postfix){
-			int sum = (Score->z + Score->o + Score->a + Score->A)%MOD;
-			if(itr == '&'){
-				Score->z = (((4*Score->z + 2*Score->a + 2*Score->A + Score->o)%MOD)*power((4*ans)%MOD, MOD -2))%MOD;
-				Score->a = ((Score->o + 2*Score->a)*power((4*ans)%MOD, MOD -2))%MOD;
-				Score->A = ((Score->o + 2*Score->A)*power((4*ans)%MOD, MOD -2))%MOD;
-				// cout << Score->z << " " << Score->o << " " << Score->a << " " << Score->A << " " << sum << endl;
-			}else if(itr == '|'){
-				Score->o = ((Score->z + 4*Score->o + 2*Score->a + 2*Score->A)*power((4*ans)%MOD, MOD -2))%MOD;
-				Score->a = ((Score->z + 2*Score->a)*power((4*ans)%MOD, MOD -2))%MOD;
-				Score->A = ((Score->z + 2*Score->A)*power((4*ans)%MOD, MOD -2))%MOD;
+
+		int and_opp[] = {9, 1, 3, 3}, or_opp[] = {1, 9, 3, 3}, xor_opp[] = {4, 4, 4, 4}, ans[] = {1, 1, 1, 1}, deno = 4;
+		int and_hash[][4] = {{4, 0, 0, 0}, {1, 1, 1, 1}, {2, 0, 2, 0}, {2, 0, 0, 2}};
+		int or_hash[][4] = {{1, 1, 1, 1}, {0, 4, 0, 0}, {0, 2, 2, 0}, {0, 2, 0, 2}};
+		int xor_hash[][4] = {{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}};
+
+		for(auto itr: s){
+			
+			if(itr == '|'){
+				deno = (deno * 4)%MOD;
+				if(ans[0] == 1 and ans[1] == 1 and ans[2] == 1 and ans[3] == 1){
+					for(int i = 0; i < 4; ++i){
+						ans[i] = or_opp[i];
+					}
+					continue;
+				}
+				int temp_0 = 0, temp_1 = 0, temp_2 = 0, temp_3 = 0;
+				for(int i = 0; i < 4; ++i){
+					temp_0 = (temp_0 + (ans[i] * or_hash[i][0]) % MOD)%MOD;
+					temp_1 = (temp_1 + (ans[i] * or_hash[i][1]) % MOD)%MOD;
+					temp_2 = (temp_2 + (ans[i] * or_hash[i][2]) % MOD)%MOD;
+					temp_3 = (temp_3 + (ans[i] * or_hash[i][3]) % MOD)%MOD;
+				}
+				ans[0] = temp_0, ans[1] = temp_1, ans[2] = temp_2, ans[3] = temp_3;
+			}else if(itr == '&'){
+				deno = (deno * 4)%MOD;
+				if(ans[0] == 1 and ans[1] == 1 and ans[2] == 1 and ans[3] == 1){
+					for(int i = 0; i < 4; ++i){
+						ans[i] = and_opp[i];
+					}
+					continue;
+				}
+				int temp_0 = 0, temp_1 = 0, temp_2 = 0, temp_3 = 0;
+				for(int i = 0; i < 4; ++i){
+					temp_0 = (temp_0 + (ans[i] * and_hash[i][0]) % MOD)%MOD;
+					temp_1 = (temp_1 + (ans[i] * and_hash[i][1]) % MOD)%MOD;
+					temp_2 = (temp_2 + (ans[i] * and_hash[i][2]) % MOD)%MOD;
+					temp_3 = (temp_3 + (ans[i] * and_hash[i][3]) % MOD)%MOD;
+				}
+				ans[0] = temp_0, ans[1] = temp_1, ans[2] = temp_2, ans[3] = temp_3;
 			}else if(itr == '^'){
-				Score->z = Score->o = Score->a = Score->A = (748683265)%MOD;
+				deno = (deno * 4)%MOD;
+				if(ans[0] == 1 and ans[1] == 1 and ans[2] == 1 and ans[3] == 1){
+					for(int i = 0; i < 4; ++i){
+						ans[i] = xor_opp[i];
+					}
+					continue;
+				}
+				int temp_0 = 0, temp_1 = 0, temp_2 = 0, temp_3 = 0;
+				for(int i = 0; i < 4; ++i){
+					temp_0 = (temp_0 + (ans[i] * xor_hash[i][0]) % MOD)%MOD;
+					temp_1 = (temp_1 + (ans[i] * xor_hash[i][1]) % MOD)%MOD;
+					temp_2 = (temp_2 + (ans[i] * xor_hash[i][2]) % MOD)%MOD;
+					temp_3 = (temp_3 + (ans[i] * xor_hash[i][3]) % MOD)%MOD;
+				}
+				ans[0] = temp_0, ans[1] = temp_1, ans[2] = temp_2, ans[3] = temp_3;
 			}
+			// for(int i = 0; i < 4; ++i)
+			// 	cout << ans[i] << " ";
+			// cout << endl;
 		}
-		// int total = (Score->z + Score->o + Score->a + Score->A)%MOD;
+
+		int gcd = __gcd(deno, ans[0]);
+		ans[0] = ((ans[0]/gcd)*(power(deno/gcd, MOD -2))) % MOD;
 		
-		// int ansZ = ((Score->z/__gcd(Score->z, total))*(power(total/__gcd(Score->z, total), MOD -2)))%MOD;
-		// int ansO = ((Score->o/__gcd(Score->o, total))*(power(total/__gcd(Score->o, total), MOD -2)))%MOD;
-		// int ansa = ((Score->a/__gcd(Score->a, total))*(power(total/__gcd(Score->a, total), MOD -2)))%MOD;
-		// int ansA = ((Score->A/__gcd(Score->A, total))*(power(total/__gcd(Score->A, total), MOD -2)))%MOD;
-		
-		// cout << ansZ << " " << ansO << " " << ansa << " " << ansA << endl;
-		cout << Score->z << " " << Score->o << " " << Score->a << " " << Score->A << "\n";
+		gcd = __gcd(deno, ans[1]);
+		ans[1] = ((ans[1]/gcd)*(power(deno/gcd, MOD -2))) % MOD;
+
+		gcd = __gcd(deno, ans[2]);
+		ans[2] = ((ans[2]/gcd)*(power(deno/gcd, MOD -2))) % MOD;
+
+		gcd = __gcd(deno, ans[3]);
+		ans[3] = ((ans[3]/gcd)*(power(deno/gcd, MOD -2))) % MOD;
+
+
+		cout << ans[0] << " " << ans[1] << " " << ans[2] << " " << ans[3] << endl;
 	}
 	return 0;
 }

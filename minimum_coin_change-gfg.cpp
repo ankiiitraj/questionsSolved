@@ -21,42 +21,56 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-int dp[1005][1005];
-int recurse(vi &a, int pos, int prev){
-    if(pos < 0){
+const int INF = 100000000000005; // 1e15 +5
+
+int rec(int arr[], int n, int arr_size, int dp[]){
+    if(n == 0){
         return 0;
+    }else if(n < arr[0LL]){
+        return INF;
     }
-    if(dp[pos][prev] != -1)
-        return dp[pos][prev];
-    return dp[pos][prev] = max(a[pos] < a[prev] ? 1+ recurse(a, pos -1, pos) : 0, recurse(a, pos -1, prev));
+    
+    if(dp[n] != -1)
+        return dp[n];
+        
+    int ans = INF;
+    for(int i = 0; i < arr_size; ++i){
+        ans = min(rec(arr, n - arr[i], arr_size, dp) +1, ans);
+    }
+    
+    return dp[n] = ans;
+    
 }
 
-void solve(){
-    int n;
-    memset(dp, 0, sizeof dp);
-    cin >> n;
-    vi a(n);
-    scnarr(a, n);
-    // a.push_back(1000);
-    // cout << recurse(a, n -1, n) << endl;
-    a.insert(a.begin(), -1);
-    // for(int i = 0; i <= n; ++i)
-    //     dp[i][0] = 1;
-    int lis[n +1];
-    lis[1] = 1;
-    for(int i = 2; i <= n; ++i){
-        lis[i] = 1;
-        for(int j = 1; j < i; ++j){
-            if(a[i] > a[j]){
-                lis[i] = max(lis[i], lis[j] +1);
+int iterate(int a[], int value, int n){
+    int dp[value +1];
+    dp[0] = 0;
+    for(int i = 1; i <= value; ++i){
+        dp[i] = INF;
+        for(int j = 0; j < n; ++j){
+            if(a[j] <= i){
+                dp[i] = min(dp[i - a[j]] +1, dp[i]);
             }
         }
     }
-    int ans = 1;
-    for(int i = 1; i <= n; ++i){
-        ans = max(ans, lis[i]);
+    return dp[value];
+}
+
+void solve(){
+    int value, n;
+    cin >> value >> n;
+    int arr[n], dp[value +1];
+    memset(dp, -1, sizeof dp);
+    for(int i = 0; i < n; ++i)
+        cin >> arr[i];
+    sort(arr, arr + n);
+    // int ans = rec(arr, value, n, dp); 
+    int ans = iterate(arr, value, n); 
+    if(ans > value){
+        cout << "-1\n";
+    }else{
+        cout << ans << endl;
     }
-    cout << ans << endl;
     
 }
 
@@ -84,7 +98,7 @@ plate - Initial template
 bfs 
 dfs
 fenwik - BIT
-binary_search
+ binary_search
 segment_tree
 */
     

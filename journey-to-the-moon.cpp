@@ -21,43 +21,59 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-int dp[1005][1005];
-int recurse(vi &a, int pos, int prev){
-    if(pos < 0){
-        return 0;
+
+int parent[100005], size[100005];
+
+void init(int n){
+    for(int i = 0; i < n; ++i){
+        size[i] = 1;
+        parent[i] = i;
     }
-    if(dp[pos][prev] != -1)
-        return dp[pos][prev];
-    return dp[pos][prev] = max(a[pos] < a[prev] ? 1+ recurse(a, pos -1, pos) : 0, recurse(a, pos -1, prev));
+}
+
+int find(int x){
+    if(parent[x] == x)
+        return x;
+    return parent[x] = find(parent[x]);
+}
+
+void _union(int u, int v){
+    if(size[u] > size[v]){
+        size[u] += size[v];
+        size[v] = 0;
+        parent[v] = parent[u];
+    }else{
+        size[v] += size[u];
+        size[u] = 0;
+        parent[u] = parent[v];
+    }
 }
 
 void solve(){
-    int n;
-    memset(dp, 0, sizeof dp);
-    cin >> n;
-    vi a(n);
-    scnarr(a, n);
-    // a.push_back(1000);
-    // cout << recurse(a, n -1, n) << endl;
-    a.insert(a.begin(), -1);
-    // for(int i = 0; i <= n; ++i)
-    //     dp[i][0] = 1;
-    int lis[n +1];
-    lis[1] = 1;
-    for(int i = 2; i <= n; ++i){
-        lis[i] = 1;
-        for(int j = 1; j < i; ++j){
-            if(a[i] > a[j]){
-                lis[i] = max(lis[i], lis[j] +1);
-            }
+    int n, p, x, y;
+    cin >> n >> p;
+    init(n);
+    for(int i = 0; i < p; ++i){
+        cin >> x >> y;
+        x = find(x);
+        y = find(y);
+        if(x == y)
+            continue;
+        _union(x, y);
+    }
+    int total = 0;
+    for(int i = 0; i < n; ++i){
+        if(size[i])
+            total += size[i];
+    }
+    int ans = 0;
+    for(int i = 0; i < n +1; ++i){
+        if(parent[i] == i){
+            total -= size[i];
+            ans += total*size[i]; 
         }
     }
-    int ans = 1;
-    for(int i = 1; i <= n; ++i){
-        ans = max(ans, lis[i]);
-    }
     cout << ans << endl;
-    
 }
 
 signed main()
@@ -67,7 +83,7 @@ signed main()
 //     freopen("ip.txt", "r", stdin);
 //     freopen("op.txt", "w", stdout);
 // #endif
-    int t; cin >> t; while(t--)
+    // int t; cin >> t; while(t--)
         solve();
     return 0;
 }
