@@ -39,10 +39,10 @@ vector<vector<string>> partition(string s){
 }
 
 int main(){
-#ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
-#endif
+//#ifndef ONLINE_JUDGE
+//    freopen("ip.txt", "r", stdin);
+//    freopen("op.txt", "w", stdout);
+//#endif
 	string s;
 	cin >> s;
 	vector<vector<string>> res = partition(s);
