@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <time.h>
 #define int long long int
+#define minimum(a, b) min(a, b)
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
@@ -26,18 +27,17 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int n;
-	cin >> n;
-	vi a(n);
-	scnarr(a, n);
-	
-	int ans = 0;
-	for(int i = 0; i < n -1; ++i){
-		ans += max(0LL, a[i] - a[i +1]);
-	}
-
-	cout << ans << endl;
-
+	int new_x, new_y, new_z, new_xx, new_yy, new_zz, new_rr;
+    cin >> new_x >> new_y >> new_z;
+    cin >> new_xx >> new_yy >> new_zz;
+    if ((new_zz > (new_x + new_z - minimum(new_z, new_yy)))) {
+        new_rr = 2 * (new_zz - (new_x + new_z - minimum(new_z, new_yy)));
+    }
+    else {
+        new_rr = 0;
+    }
+    int new_rr1 = 2 * minimum(new_z, new_yy) - new_rr;
+    cout << new_rr1 << endl;
 }
 
 signed main()

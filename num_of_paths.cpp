@@ -2,7 +2,6 @@
 #include <time.h>
 #define int long long int
 #define pb push_back
-#define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
 #define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
@@ -15,7 +14,6 @@
 using namespace std;
 using namespace chrono;
 /*
-	----------------------------------------------------------------------
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
@@ -25,18 +23,29 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-void solve(){
-	int n;
-	cin >> n;
-	vi a(n);
-	scnarr(a, n);
-	
-	int ans = 0;
-	for(int i = 0; i < n -1; ++i){
-		ans += max(0LL, a[i] - a[i +1]);
-	}
+int res = 0;
 
-	cout << ans << endl;
+void num_paths(int src, int sink, vi adj[]){
+	if(src == sink){
+		res++;
+	}
+	for(auto itr: adj[src]){
+		num_paths(itr, sink, adj);
+	}
+}
+
+void solve(){
+	int n, m, x, y;
+	cin >> n >> m;
+	int src = 1, sink = 130;
+	vi adj[n +1];
+
+	for(int i = 0; i < m; ++i){
+		cin >> x >> y;
+		adj[x].push_back(y);
+	}
+	num_paths(1, sink, adj);
+	cout << "1\n" << res +1 << endl;
 
 }
 
@@ -44,10 +53,10 @@ signed main()
 {
 	faster;
 #ifndef ONLINE_JUDGE
-	freopen("ip.txt", "r", stdin);
-	freopen("op.txt", "w", stdout);
+	freopen("op.txt", "r", stdin);
+	freopen("ip.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	// int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

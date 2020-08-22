@@ -26,18 +26,25 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int n;
-	cin >> n;
-	vi a(n);
-	scnarr(a, n);
-	
-	int ans = 0;
-	for(int i = 0; i < n -1; ++i){
-		ans += max(0LL, a[i] - a[i +1]);
+	int n, k;
+	cin >> n >> k;
+	if(n > k){
+		if(n&1){
+			if(k&1){
+				cout << 0 << endl;
+			}else{
+				cout << 1 << endl;
+			}
+		}else{
+			if(k&1){
+				cout << 1 << endl;
+			}else{
+				cout << 0 << endl;
+			}
+		}
+	}else if(n <= k){
+		cout << k - n << endl;
 	}
-
-	cout << ans << endl;
-
 }
 
 signed main()

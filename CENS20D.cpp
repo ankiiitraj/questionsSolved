@@ -2,7 +2,6 @@
 #include <time.h>
 #define int long long int
 #define pb push_back
-#define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
 #define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
@@ -15,7 +14,6 @@
 using namespace std;
 using namespace chrono;
 /*
-	----------------------------------------------------------------------
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
@@ -26,18 +24,17 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int n;
+	int n, ans = 0;
 	cin >> n;
 	vi a(n);
 	scnarr(a, n);
-	
-	int ans = 0;
-	for(int i = 0; i < n -1; ++i){
-		ans += max(0LL, a[i] - a[i +1]);
+	for(int i = 0; i < n; ++i){
+		for(int j = i +1; j < n; ++j){
+			if((a[i]&a[j]) == a[i])
+				ans++;
+		}
 	}
-
 	cout << ans << endl;
-
 }
 
 signed main()

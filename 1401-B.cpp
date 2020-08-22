@@ -25,20 +25,76 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-void solve(){
-	int n;
-	cin >> n;
-	vi a(n);
-	scnarr(a, n);
-	
+int func1(int x1, int y1, int z1, int x2, int y2, int z2){
 	int ans = 0;
-	for(int i = 0; i < n -1; ++i){
-		ans += max(0LL, a[i] - a[i +1]);
-	}
+	int _min1;
+	
+	_min1 = min(z1, y2);
+	ans += 2*_min1;
+	z1 -= _min1;
+	y2 -= _min1;
 
-	cout << ans << endl;
+	_min1 = min(z2, x1);
+	z2 -= _min1;
+	x1 -= _min1;
+	_min1 = min(z2, z1);
+	z2 -= _min1;
+	z1 -= _min1;
+	_min1 = min(y1, y2);
+	y1 -= _min1;
+	y2 -= _min1;
+	_min1 = min(y1, x2);
+	y1 -= _min1;
+	x2 -= _min1;
 
+	_min1 = min(y1, z2);
+	ans -= 2*_min1;
+	y1 -= _min1;
+	z2 -= _min1;
+	return ans;
 }
+
+int func2(int x1, int y1, int z1, int x2, int y2, int z2){
+	int ans = 0;
+	int _min1;
+	
+
+	_min1 = min(z2, x1);
+	z2 -= _min1;
+	x1 -= _min1;
+	_min1 = min(z2, z1);
+	z2 -= _min1;
+	z1 -= _min1;
+	_min1 = min(y1, y2);
+	y1 -= _min1;
+	y2 -= _min1;
+	_min1 = min(y1, x2);
+	y1 -= _min1;
+	x2 -= _min1;
+
+	_min1 = min(z1, y2);
+	ans += 2*_min1;
+	z1 -= _min1;
+	y2 -= _min1;
+
+	_min1 = min(y1, z2);
+	ans -= 2*_min1;
+	y1 -= _min1;
+	z2 -= _min1;
+	
+	return ans;
+}
+
+
+void solve(){
+	int x1, y1, z1, x2, y2, z2;
+	cin >> x1 >> y1 >> z1 >> x2 >> y2 >> z2;
+
+
+	
+	cout << max(func1(x1, y1, z1, x2, y2, z2), func2(x1, y1, z1, x2, y2, z2)) << endl;
+
+}	
 
 signed main()
 {

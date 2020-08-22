@@ -2,7 +2,6 @@
 #include <time.h>
 #define int long long int
 #define pb push_back
-#define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
 #define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
@@ -15,7 +14,6 @@
 using namespace std;
 using namespace chrono;
 /*
-	----------------------------------------------------------------------
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
@@ -25,21 +23,6 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-void solve(){
-	int n;
-	cin >> n;
-	vi a(n);
-	scnarr(a, n);
-	
-	int ans = 0;
-	for(int i = 0; i < n -1; ++i){
-		ans += max(0LL, a[i] - a[i +1]);
-	}
-
-	cout << ans << endl;
-
-}
-
 signed main()
 {
 	faster;
@@ -47,9 +30,47 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
-		solve();
-	return 0;
+	int n, m;
+	cin >> n >> m;
+	int a[n +1][m +1];
+	char c;
+	for(int i = 1; i <= n; ++i){
+		for(int j = 1; j <= m; ++j){
+			cin >> c;
+			a[i][j] = (c - '0');
+		}
+	}	
+	int bit[n +2][m +2];
+	memset(bit, 0, sizeof bit);
+
+	int q;
+	cin >> q;
+	while(q--){
+		int xl, yl, xr, yr;
+		cin >> xl >> yl >> xr >> yr;
+		bit[xl][yl]++;
+		bit[xr +1][yr +1]++;
+		bit[xl][yr +1]--;
+		bit[xr +1][yl]--;
+	}
+
+	for(int i = 1; i <= n; ++i){
+		for(int j = 1; j <= m; ++j){
+			bit[i][j] += bit[i -1][j] + bit[i][j -1] - bit[i -1][j -1];
+		}
+	}
+
+	for(int i = 1; i <= n; ++i){
+		for(int j = 1; j <= m; ++j){
+			if(bit[i][j]&1){
+				cout << (!a[i][j]);
+			}else{
+				cout << a[i][j];
+			}
+		}
+		cout << endl;
+	}
+
 }
 
 

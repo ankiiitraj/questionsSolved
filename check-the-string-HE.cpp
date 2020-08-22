@@ -2,7 +2,6 @@
 #include <time.h>
 #define int long long int
 #define pb push_back
-#define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
 #define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
@@ -15,7 +14,6 @@
 using namespace std;
 using namespace chrono;
 /*
-	----------------------------------------------------------------------
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
@@ -26,18 +24,30 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int n;
-	cin >> n;
-	vi a(n);
-	scnarr(a, n);
-	
-	int ans = 0;
-	for(int i = 0; i < n -1; ++i){
-		ans += max(0LL, a[i] - a[i +1]);
+	int n, cnt = 0, idx, hashes = 0, brackets = 0;
+	string s;
+	cin >> n >> s;
+	for(auto itr: s){
+		if(itr == '#'){
+			cnt++;
+		}
 	}
-
-	cout << ans << endl;
-
+	for(int i = 0; i < cnt; ++i){
+		cin >> idx >> idx;
+		hashes += idx;
+	}
+	cnt = n - cnt;
+	cnt /= 2;
+	for(int i = 0; i < cnt; ++i){
+		cin >> idx >> idx >> idx;
+		brackets += idx;
+	}
+	double ratio = (hashes*1.0)/(brackets*1.0);
+	if(ratio <= 0.5){
+		cout << "Yes\n";
+	}else{
+		cout << "No\n";
+	}
 }
 
 signed main()
@@ -47,7 +57,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	// int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }
