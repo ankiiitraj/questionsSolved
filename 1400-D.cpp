@@ -25,23 +25,28 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+
 void solve(){
-	int n;
+	int n, ans = 0;
 	cin >> n;
 	vi a(n +1);
 	scnarr(a, n);
 
-	map<int, vi> m;
+	vector<vi> m(n +1, vi(n +1, 0));
 	for(int i = 1; i <= n; ++i){
-		m[a[i]].push_back(i);
+		for(int j = 1; j <= n; ++j){
+			m[i][j] = m[i -1][j];
+		}
+		m[i][a[i]]++;
 	}
-
-	for(int i = 1; i <= n - 3; ++i){
-		for(int j = i +1; j <= n -2; ++j){
-			int idx_i = *lower_bound(all(m[a[j]]), j +1);
+	for(int j = 2; j <= n - 2; ++j){
+		for(int k = j +1; k <= n -1; ++k){
+			ans += m[j -1][a[k]]*(m[n][a[j]] - m[k][a[j]]);
 		}
 	}
 	
+	cout << ans << endl;
+
 }
 
 signed main()
