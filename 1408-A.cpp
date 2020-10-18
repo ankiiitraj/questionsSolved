@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -26,33 +26,35 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	cout << fixed << setprecision(12);
 	int n;
 	cin >> n;
-	vector<double> a(n +1);
+	vi a(n), c(n), b(n);
 	scnarr(a, n);
-
-	double dp[n +1][n +1];
-	memset(dp, 0.0, sizeof dp);
-	dp[0][0] = 1.0;
-	for(int i = 1; i <= n; ++i){
-		dp[i][0] = dp[i -1][0] * (1 - a[i]);
-	}
-	for(int i = 1; i <= n; ++i){
-		for(int j = 1; j <= i; ++j){
-			dp[i][j] = dp[i -1][j -1]*a[i] + dp[i -1][j]*(1 - a[i]);
+	scnarr(b, n);
+	scnarr(c, n);
+	
+	int prev = a[0], ini = a[0];
+	cout << a[0] << " ";
+	for(int i = 1; i < n -1; ++i){
+		if(a[i] != prev){
+			cout << a[i] << " ";
+			prev = a[i];
+		}else if(b[i] != prev){
+			cout << b[i] << " ";
+			prev = b[i];
+		}else{
+			cout << c[i] << " ";
+			prev = c[i];
 		}
 	}
-
-	double ans = 0.0;
-
-	for(int i = n/2 +1; i <= n; ++i){
-		ans += dp[n][i];
+	if(a[n -1] != ini and a[n -1] != prev){
+		cout << a[n -1];
+	}else if(b[n -1] != ini and b[n -1] != prev){
+		cout << b[n -1];
+	}else if(c[n -1] != ini and c[n -1] != prev){
+		cout << c[n -1];
 	}
-
-	cout << ans << endl;
-	
-	
+	cout << endl;
 }
 
 signed main()
@@ -62,7 +64,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

@@ -1,0 +1,161 @@
+#include <bits/stdc++.h>
+#include <time.h>
+#define int long long int
+#define pb push_back
+#define mem(a, x) memset(a, x, sizeof a)
+#define all(a) a.begin(), a.end()
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
+#define vi vector<int>
+#define si set<int>
+#define pii pair <int, int>
+#define sii set<pii>
+#define vii vector<pii>
+#define mii map <int, int>
+#define faster ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+using namespace std;
+using namespace chrono;
+/*
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
+*/
+/* -------------------------------Solution Sarted--------------------------------------*/
+void __print(int x) {cerr << x;}
+void __print(long x) {cerr << x;}
+void __print(unsigned x) {cerr << x;}
+void __print(unsigned long x) {cerr << x;}
+void __print(unsigned long long x) {cerr << x;}
+void __print(float x) {cerr << x;}
+void __print(double x) {cerr << x;}
+void __print(long double x) {cerr << x;}
+void __print(char x) {cerr << '\'' << x << '\'';}
+void __print(const char *x) {cerr << '\"' << x << '\"';}
+void __print(const string &x) {cerr << '\"' << x << '\"';}
+void __print(bool x) {cerr << (x ? "true" : "false");}
+ 
+template<typename T, typename V>
+void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}';}
+template<typename T>
+void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? "," : ""), __print(i); cerr << "}";}
+void _print() {cerr << "]\n";}
+template <typename T, typename... V>
+void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
+#ifndef ONLINE_JUDGE
+#define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
+#else
+#define debug(x...)
+#endif
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
+const int INF = 100000000000005; // 1e15 +5
+
+int calc_score(int n, string s){
+	int ans = (s[0] == 'W' ? 1 : 0);
+	for(int i = 1; i < n; ++i){
+		if(s[i] == 'W'){
+			if(s[i -1] == 'W')
+				ans += 2;
+			else
+				ans++;
+		}
+	}
+	return ans;
+}
+
+void solve(){
+	int n, k, ans = 0, cnt = 0;
+	string s;
+	cin >> n >> k >> s;
+
+	if(k == 0){
+		cout << calc_score(n, s) << endl;
+		return;
+	}
+
+	for(auto itr: s){
+		if(itr == 'L'){
+			cnt++;
+		}
+	}
+
+	k = min(k, cnt);
+
+	string Ls(n, 'L');
+	if(s == Ls){
+		cout << 2*(k -1) +1 << endl;
+		return;
+	}
+
+	int prev;	
+	for(int i = 0; i < n; ++i){
+		if(s[i] == 'W'){
+			prev = i;
+			break;
+		}
+	}
+	int init = prev;
+	mii m;
+	for(int i = prev +1; i < n; ++i){
+		if(s[i] == 'W'){
+			if(i - prev - 1 > 0)
+				m[i - prev -1]++;
+			prev = i;
+		}
+	}
+	ans = calc_score(n, s);
+	for(auto itr: m){
+		for(int j = 0; j < itr.second; ++j){
+			if(k >= itr.first){
+				ans += 2*itr.first +1;
+				k -= itr.first;
+			}else{
+				ans += 2*k;
+				k -= k;
+				cout << ans << endl;
+				return;
+			}
+		}
+	}
+
+	for(int i = prev +1; i < n and k > 0; ++i){
+		ans += 2;
+		k--;
+	}
+
+	for(int i = init -1; i >= 0 and k > 0; --i){
+		ans += 2;
+		k--;
+	}
+
+	cout << ans << endl;
+
+}
+
+signed main()
+{
+	faster;
+#ifndef ONLINE_JUDGE
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
+#endif
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
+}
+
+
+//Author : Ankit Raj
+//Problem Link :
+
+/*Snippets*/
+/*
+sieve - prime factorization using sieve and primes in range
+zpower - pow with mod
+plate - Initial template
+bfs 
+dfs
+fenwik - BIT
+binary_search
+segment_tree
+*/
+	

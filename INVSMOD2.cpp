@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -15,56 +15,53 @@
 using namespace std;
 using namespace chrono;
 /*
-	----------------------------------------------------------------------
-	Things to remember : check for coners n = 1, pass references instead
+    ----------------------------------------------------------------------
+    Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
 //Constants
-const int MOD = 1000000007; // 1e9 + 7
+const int MOD = 2; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+vector<vi> dp(201);
+void pre(int n){
+    vi res = {1};
+    dp[1] = res;
+    for(int i = 1; i < n; ++i){
+        vi prev = res;
+        res.assign((i * (i +1))/2 +1, 0);
+        vi m(i +1, 1);
+
+        for(int j = 0; j < i +1; ++j){
+            for(int k = 0; k < prev.size(); ++k){
+                res[k + j] = (res[k + j] + (m[j] * prev[k] % MOD)) % MOD;
+            }
+        }
+        dp[i +1] = res;
+    }
+    return;
+}
+
 void solve(){
-	cout << fixed << setprecision(12);
-	int n;
-	cin >> n;
-	vector<double> a(n +1);
-	scnarr(a, n);
+    int n, k;
+    cin >> n >> k;
 
-	double dp[n +1][n +1];
-	memset(dp, 0.0, sizeof dp);
-	dp[0][0] = 1.0;
-	for(int i = 1; i <= n; ++i){
-		dp[i][0] = dp[i -1][0] * (1 - a[i]);
-	}
-	for(int i = 1; i <= n; ++i){
-		for(int j = 1; j <= i; ++j){
-			dp[i][j] = dp[i -1][j -1]*a[i] + dp[i -1][j]*(1 - a[i]);
-		}
-	}
-
-	double ans = 0.0;
-
-	for(int i = n/2 +1; i <= n; ++i){
-		ans += dp[n][i];
-	}
-
-	cout << ans << endl;
-	
-	
+    cout << dp[n][k] << endl;
 }
 
 signed main()
 {
-	faster;
+    faster;
 #ifndef ONLINE_JUDGE
-	freopen("ip.txt", "r", stdin);
-	freopen("op.txt", "w", stdout);
+    freopen("ip.txt", "r", stdin);
+    freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
-		solve();
-	return 0;
+    pre(200);
+    int t; cin >> t; while(t--)
+        solve();
+    return 0;
 }
 
 
@@ -82,4 +79,4 @@ fenwik - BIT
 binary_search
 segment_tree
 */
-	
+    

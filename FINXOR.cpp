@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -26,43 +26,47 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	cout << fixed << setprecision(12);
-	int n;
+	int n, sum = 0;
 	cin >> n;
-	vector<double> a(n +1);
-	scnarr(a, n);
 
-	double dp[n +1][n +1];
-	memset(dp, 0.0, sizeof dp);
-	dp[0][0] = 1.0;
-	for(int i = 1; i <= n; ++i){
-		dp[i][0] = dp[i -1][0] * (1 - a[i]);
-	}
-	for(int i = 1; i <= n; ++i){
-		for(int j = 1; j <= i; ++j){
-			dp[i][j] = dp[i -1][j -1]*a[i] + dp[i -1][j]*(1 - a[i]);
+	cout << "1 1048576" << endl;
+	cin >> sum;
+	sum -= 1048576*n;
+	
+	int res = 0;
+	int maha_mahim = sum;
+	if(sum&1)
+		res += 1;
+	for(int i = 1; i <= 19; ++i){
+		cout << "1 " << (int)pow(2LL, i) << endl;
+		cin >> sum;
+		// if(sum - (int)pow(2LL, i)*n == maha_mahim){
+		// 	break;
+		// }
+		int diff = sum - maha_mahim;
+		diff = diff/(int)pow(2LL, i);
+		if(diff == 0){
+			if((n/2)&1)
+				res += (int)pow(2LL, i);
+		}else{
+			if(((n - diff)/2)&1){
+				res += (int)pow(2LL, i);
+			}
 		}
 	}
 
-	double ans = 0.0;
-
-	for(int i = n/2 +1; i <= n; ++i){
-		ans += dp[n][i];
-	}
-
-	cout << ans << endl;
-	
-	
+	cout << "2 " << res << endl;
+	cin >> sum;
 }
 
 signed main()
 {
 	faster;
-#ifndef ONLINE_JUDGE
-	freopen("ip.txt", "r", stdin);
-	freopen("op.txt", "w", stdout);
-#endif
-	// int t; cin >> t; while(t--)
+// #ifndef ONLINE_JUDGE
+// 	freopen("ip.txt", "r", stdin);
+// 	freopen("op.txt", "w", stdout);
+// #endif
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

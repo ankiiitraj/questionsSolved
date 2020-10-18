@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -26,33 +26,47 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	cout << fixed << setprecision(12);
 	int n;
 	cin >> n;
-	vector<double> a(n +1);
-	scnarr(a, n);
-
-	double dp[n +1][n +1];
-	memset(dp, 0.0, sizeof dp);
-	dp[0][0] = 1.0;
-	for(int i = 1; i <= n; ++i){
-		dp[i][0] = dp[i -1][0] * (1 - a[i]);
+	if(n == 3){
+		cout << "2\n";
+		return;
 	}
-	for(int i = 1; i <= n; ++i){
-		for(int j = 1; j <= i; ++j){
-			dp[i][j] = dp[i -1][j -1]*a[i] + dp[i -1][j]*(1 - a[i]);
+	if(n%4 != 0 and (n +1)%4 != 0){
+		cout << "0\n";
+		return;
+	}
+
+	int semi_sum = (n*(n +1))/4 - (n -1), l = 1, r = n;
+	int sum = (n*(n +1))/4, ans = 0;
+
+	while(l < r){
+		int mid = l + (r - l)/2;
+		if((mid*(mid +1))/2 == semi_sum){
+			r = mid;
+			break;
+		}else if((mid*(mid +1))/2 >= semi_sum){
+			r = mid;
+		}else{
+			l = mid +1;
 		}
 	}
-
-	double ans = 0.0;
-
-	for(int i = n/2 +1; i <= n; ++i){
-		ans += dp[n][i];
+	
+	while((r*(r +1))/2 <= sum){
+		int dif = sum - (r*(r +1))/2;
+		if(dif == 0){
+			ans += (r*(r -1))/2;
+			r = n - r;
+			ans += (r*(r -1))/2;
+			break;
+		}
+		int left_idx = max(1LL, r +1 - dif);
+		int right_idx = min(n, r + dif) - dif;
+		ans += right_idx - left_idx +1;
+		++r;
 	}
-
 	cout << ans << endl;
-	
-	
+
 }
 
 signed main()
@@ -62,7 +76,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -25,34 +25,30 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+bool cmp(pii &p1, pii &p2){
+	if(p1.first == p2.first)
+		return p1.second < p2.second;
+	return p1.first < p2.second;
+}
+
 void solve(){
-	cout << fixed << setprecision(12);
 	int n;
 	cin >> n;
-	vector<double> a(n +1);
-	scnarr(a, n);
+	vii a(n);
+	for(int i = 0; i < n; ++i)
+		cin >> a[i].first >> a[i].second;
+	sort(all(a));
+	vi one, two;
+	for(int i = 0; i < n; ++i)
+		one.push_back(a[i].first + a[i].second);
+	for(int i = 0; i < n; ++i)
+		two.push_back(a[i].first - a[i].second);
 
-	double dp[n +1][n +1];
-	memset(dp, 0.0, sizeof dp);
-	dp[0][0] = 1.0;
-	for(int i = 1; i <= n; ++i){
-		dp[i][0] = dp[i -1][0] * (1 - a[i]);
-	}
-	for(int i = 1; i <= n; ++i){
-		for(int j = 1; j <= i; ++j){
-			dp[i][j] = dp[i -1][j -1]*a[i] + dp[i -1][j]*(1 - a[i]);
-		}
-	}
+	sort(all(one));
+	sort(all(two));
 
-	double ans = 0.0;
+	cout << max(one[n -1] - one[0], two[n -1] - two[0]);
 
-	for(int i = n/2 +1; i <= n; ++i){
-		ans += dp[n][i];
-	}
-
-	cout << ans << endl;
-	
-	
 }
 
 signed main()
@@ -82,4 +78,3 @@ fenwik - BIT
 binary_search
 segment_tree
 */
-	

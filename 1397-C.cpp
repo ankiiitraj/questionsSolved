@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -26,33 +26,31 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	cout << fixed << setprecision(12);
 	int n;
 	cin >> n;
-	vector<double> a(n +1);
+	vi a(n);
 	scnarr(a, n);
-
-	double dp[n +1][n +1];
-	memset(dp, 0.0, sizeof dp);
-	dp[0][0] = 1.0;
-	for(int i = 1; i <= n; ++i){
-		dp[i][0] = dp[i -1][0] * (1 - a[i]);
+	if(n == 1){
+		cout << "1 1\n" << -a[0] << endl;
+		cout << "1 1\n0\n";
+		cout << "1 1\n0\n";
+		return;
 	}
-	for(int i = 1; i <= n; ++i){
-		for(int j = 1; j <= i; ++j){
-			dp[i][j] = dp[i -1][j -1]*a[i] + dp[i -1][j]*(1 - a[i]);
-		}
+	cout << "1 " << n -1 << endl;
+	for(int i = 0; i < n -1; ++i){
+		cout << a[i]*(n -1) << " ";
 	}
+	cout << endl;
+	cout << n << " " << n << endl;
+	cout << -a[n -1] << endl;
 
-	double ans = 0.0;
-
-	for(int i = n/2 +1; i <= n; ++i){
-		ans += dp[n][i];
+	cout << "1 " << n << endl;
+	for(int i = 0; i < n -1; ++i){
+		cout << -a[i]*n << " ";
 	}
-
-	cout << ans << endl;
-	
-	
+	cout << "0 ";
+	cout << endl;
+	return;
 }
 
 signed main()

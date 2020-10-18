@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -25,33 +25,44 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-void solve(){
-	cout << fixed << setprecision(12);
-	int n;
-	cin >> n;
-	vector<double> a(n +1);
-	scnarr(a, n);
-
-	double dp[n +1][n +1];
-	memset(dp, 0.0, sizeof dp);
-	dp[0][0] = 1.0;
-	for(int i = 1; i <= n; ++i){
-		dp[i][0] = dp[i -1][0] * (1 - a[i]);
-	}
-	for(int i = 1; i <= n; ++i){
-		for(int j = 1; j <= i; ++j){
-			dp[i][j] = dp[i -1][j -1]*a[i] + dp[i -1][j]*(1 - a[i]);
+int exp(int x, int y){
+	int ans = 1;
+	while(y > 0){
+		if(y&1){
+			ans = (ans * x);
+			--y;
+		}else{
+			x = (x * x);
+			y /= 2;
 		}
 	}
+	return ans;
+}
 
-	double ans = 0.0;
-
-	for(int i = n/2 +1; i <= n; ++i){
-		ans += dp[n][i];
+void solve(){
+	int n, ans = 0;
+	cin >> n;
+	vi a(n);
+	scnarr(a, n);
+	sort(all(a));
+	int max_ = *max_element(all(a));
+	int l = 1;
+	long double expo = (long double)log2(max_)/(n -1);
+	int r  = exp(2, ceil(expo));
+	int res = 1e18;
+	for(int c = 1; 1; ++c){
+		ans = 0;
+		for(int i = 0; i < n; ++i){
+			int temp = exp(c, i);
+			if(temp > 1e11){
+				cout << res << endl;
+				return;
+			}
+			ans += abs(temp - a[i]);
+		}
+		res = min(res, ans);
 	}
-
-	cout << ans << endl;
-	
+	cout << res << endl;
 	
 }
 

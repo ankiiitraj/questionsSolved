@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -26,33 +26,67 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	cout << fixed << setprecision(12);
 	int n;
 	cin >> n;
-	vector<double> a(n +1);
+	vi a(n), pos, neg;
 	scnarr(a, n);
-
-	double dp[n +1][n +1];
-	memset(dp, 0.0, sizeof dp);
-	dp[0][0] = 1.0;
-	for(int i = 1; i <= n; ++i){
-		dp[i][0] = dp[i -1][0] * (1 - a[i]);
+	int ans = 1;
+	if(n == 5){
+		for(int i = 0; i < n; ++i){
+			ans = ans * a[i];
+		}
+		cout << ans << endl;
+		return;
 	}
-	for(int i = 1; i <= n; ++i){
-		for(int j = 1; j <= i; ++j){
-			dp[i][j] = dp[i -1][j -1]*a[i] + dp[i -1][j]*(1 - a[i]);
+	for(auto itr: a){
+		if(itr < 0){
+			neg.push_back(itr);
+		}else{
+			pos.push_back(itr);
 		}
 	}
-
-	double ans = 0.0;
-
-	for(int i = n/2 +1; i <= n; ++i){
-		ans += dp[n][i];
+	if(pos.size() == 0 and neg.size() == 0){
+		ans = 0;
+	}else if(pos.size() == 0){
+		sort(all(neg));
+		reverse(all(neg));
+		if(neg.size() < 5){
+			ans = 0;
+		}else{
+			for(int i = 0; i < 5; ++i){
+				ans = ans*neg[i];
+			}
+		}
+	}else if(neg.size() == 0){
+		sort(all(pos));
+		reverse(all(pos));
+		if(pos.size() < 5){
+			ans = 0;
+		}else{
+			for(int i = 0; i < 5; ++i){
+				ans = ans*pos[i];
+			}
+		}
+	}else{
+		sort(all(pos));
+		sort(all(neg));
+		int si_pos = pos.size(), si_neg = neg.size(), res = -INF;
+		if(si_neg + si_pos < 5){
+			ans = 0;
+		}else{
+			if(si_pos >= 5){
+				res = max(res, pos[si_pos -1]*pos[si_pos -2]*pos[si_pos -3]*pos[si_pos -4]*pos[si_pos -5]);
+			}
+			if(si_pos >= 3 and si_neg >= 2){
+				res = max(res, pos[si_pos -1]*pos[si_pos -2]*pos[si_pos -3]*neg[0]*neg[1]);
+			}
+			if(si_pos >= 1 and si_neg >= 4){
+				res = max(res, pos[si_pos -1]*neg[2]*neg[3]*neg[0]*neg[1]);	
+			}
+			ans = res;
+		}
 	}
-
 	cout << ans << endl;
-	
-	
 }
 
 signed main()
@@ -62,7 +96,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }
