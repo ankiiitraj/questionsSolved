@@ -15,8 +15,8 @@
 using namespace std;
 using namespace chrono;
 /*
-    ----------------------------------------------------------------------
-    Things to remember : check for coners n = 1, pass references instead
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
@@ -26,25 +26,52 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-    int l, r;
-    cin >> l >> r;
+	int n;
+	cin >> n;
+	if(n == 1){
+		cout << "2\n";
+		return;
+	}
+	vi res(4 * n, 1);
 
-    cout << (int)(((r * (r +1)))/2 - (l * (l -1))/2) << endl;
-
-
-    return;
+	for(int i = 4 * n; i > 1; i -= 2){
+		if(res[i]){
+			int cnt = 0;
+			for(int j = 2; j * j <= i; ++j){
+				if(i % j == 0){
+					res[j] = 0;
+					cnt++;
+				}
+			}
+			if(!cnt){
+				res[i] = 0;
+			}
+		}
+	}
+	int cnt = 0;
+	for(int i = 4 * n; i > 1; i -= 2){
+		if(cnt == n){
+			break;
+		}
+		if(res[i]){
+			cout << i << " ";
+			cnt++;
+		}
+	}
+	cout << endl;
+	return;
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int t; cin >> t; while(t--)
-        solve();
-    return 0;
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 
@@ -62,3 +89,4 @@ fenwik - BIT
 binary_search
 segment_tree
 */
+	

@@ -15,8 +15,8 @@
 using namespace std;
 using namespace chrono;
 /*
-    ----------------------------------------------------------------------
-    Things to remember : check for coners n = 1, pass references instead
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
@@ -26,25 +26,56 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-    int l, r;
-    cin >> l >> r;
+	int n, flag = 0;
+	cin >> n;
 
-    cout << (int)(((r * (r +1)))/2 - (l * (l -1))/2) << endl;
+	for(int i = 2; i*i <= n; ++i){
+		if(n % i == 0){
+			flag = 1;
+			break;
+		}
+	}
+
+	if(!flag){
+		for(int i = 0; i < n; ++i){
+			for(int j = 0; j < n; ++j){
+				cout << "1 ";
+			}
+			cout << endl;
+		}
+		return;
+	}
 
 
-    return;
-}
+	vector<vi> a(n, vi(n, 0));
+	for(int i = 0; i < n -1; ++i){
+		a[i][i] = 1;
+		a[i][i +1] = 1;
+	}
+	a[n -1][0] = a[n -1][n -1] = 1;
+
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < n; ++j){
+			cout << a[i][j] << " ";
+		}
+		cout << endl;
+	}
+	
+
+
+	return;
+}	
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int t; cin >> t; while(t--)
-        solve();
-    return 0;
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 

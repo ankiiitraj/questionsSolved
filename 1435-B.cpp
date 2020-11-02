@@ -15,8 +15,8 @@
 using namespace std;
 using namespace chrono;
 /*
-    ----------------------------------------------------------------------
-    Things to remember : check for coners n = 1, pass references instead
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
@@ -26,25 +26,63 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-    int l, r;
-    cin >> l >> r;
+	int n, m;
+	cin >> n >> m;
 
-    cout << (int)(((r * (r +1)))/2 - (l * (l -1))/2) << endl;
+	vector<vi> rows(n, vi(m)), columns(m, vi(n)), res(n, vi(m, 0));
+
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < m; ++j){
+			cin >> rows[i][j];
+		}
+	}
 
 
-    return;
+	for(int i = 0; i < m; ++i){
+		for(int j = 0; j < n; ++j){
+			cin >> columns[i][j];
+		}
+	}
+
+	for(int i = 0; i < n; ++i){
+		vi temp(m);
+		for(int j = 0; j < m; ++j)
+			temp[j] = columns[j][i];
+
+		bool flag = 0;
+		for(int j = 0; j < n; ++j){
+			for(int k = 0; k < m; ++k){
+				if(temp[0] == rows[j][k]){
+					res[i] = rows[j];
+					flag = 1;
+					break;
+				}
+			}
+			if(flag)
+				break;
+		}
+	}
+
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < m; ++j){
+			cout << res[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+	return;
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int t; cin >> t; while(t--)
-        solve();
-    return 0;
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 

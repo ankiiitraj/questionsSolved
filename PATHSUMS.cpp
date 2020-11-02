@@ -15,8 +15,8 @@
 using namespace std;
 using namespace chrono;
 /*
-    ----------------------------------------------------------------------
-    Things to remember : check for coners n = 1, pass references instead
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
@@ -25,26 +25,53 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+void dfs(int s, int par, vi adj[], vi &ints){
+	if(par != -1){
+		ints[par] == 1 ? ints[s] = 2 : ints[s] = 1;
+	}
+
+	for(auto itr:adj[s]){
+		if(itr != par){
+			dfs(itr, s, adj, ints);
+		}
+	}
+	return;
+}
+
 void solve(){
-    int l, r;
-    cin >> l >> r;
+	int n, x, y;
+	cin >> n;
 
-    cout << (int)(((r * (r +1)))/2 - (l * (l -1))/2) << endl;
+	vi adj[n +1];
+	for(int i = 0; i < n -1; ++i){
+		cin >> x >> y;
+		adj[x].push_back(y);
+		adj[y].push_back(x);
+	}
 
+	vi ints(n +1);
+	ints[1] = 1;
+	dfs(1, -1, adj, ints);
 
-    return;
+	for(int i = 1; i <= n; ++i){
+		cout << ints[i] << " ";
+	}
+
+	cout << endl;
+
+	return;
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int t; cin >> t; while(t--)
-        solve();
-    return 0;
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 

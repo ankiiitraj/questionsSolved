@@ -1,12 +1,5 @@
+arr = [0, 1, 3, 40, 1260, 72576, 6652800, 889574400, 163459296000, 39520825344000, 12164510040883200]
 
+n = int(input())
 
-t = int(input())
-for _ in range(t):
-	n = int(input())
-
-	num = ""
-	for _ in range(n):
-		num = num = '9'
-		bin_num = bin(num)
-		print(bin_num)
-
+print(arr[n//2])
