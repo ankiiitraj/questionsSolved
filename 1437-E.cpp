@@ -49,68 +49,97 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+void solve(){
+	int n, k;
+	cin >> n >> k;
+	vi a(n), b(k);
+	scnarr(a, n);
+	scnarr(b, k);
+	for(auto &itr: b)
+		itr--;
 
-bool find_ans(vi &a, int n){
-	int idx = -1;
-	for(int i = n -2; i > 0; --i){
-		if(a[i] <= a[i +1] and a[i] < a[i -1]){
-			idx = i;
-			break;
+	auto lis = [&](vi v){
+		if(v.empty())
+			return 0LL;
+		int res = 1;
+		vi temp = v;
+
+		multiset <int> s;
+		multiset <int> :: iterator it;
+
+		for(int i = 0; i < temp.size(); ++i){
+		    s.insert(temp[i]);
+		    
+		    it = s.upper_bound(temp[i]);
+		    
+		    if(it != s.end())
+		        s.erase(it);
+		}
+		return (int)s.size();
+	};
+	if(k == 0){
+		for(int i = 0; i < n; ++i)
+			a[i] = a[i] - i;
+		int res = lis(a);
+		cout << n - res << endl;
+		return;
+	}
+
+	vi left(n), right(n), marked(n, 0);
+	for(int i = 0; i < b[0]; ++i){
+		right[i] = b[0];
+		
+		if(a[i] > a[right[i]] - (-i + right[i])){
+			marked[i] = 1;
 		}
 	}
-	
-	if(a[n -1] < a[n -2]){
-		idx = n -1;
-	}
-
-	int cur = -1, cur_min = a[idx];
-	for(int i = idx -1; i >= 0; --i){
-		if(cur == -1){
-			cur = a[i] - cur_min;
-		}else{
-			if(a[i] - cur < 0){
-				return 0;
-			}else{
-				if(a[i] - cur > cur_min){
-					cur = a[i] - cur_min;
-				}else{
-					cur_min = a[i] - cur;
-				}
+	for(int i = 1; i < k; ++i){
+		if(a[b[i]] - a[b[i -1]] < b[i] - b[i -1]){
+			cout << "-1\n";
+			return;
+		}
+		for(int j = b[i -1] +1; j < b[i]; ++j){
+			left[j] = b[i -1];
+			right[j] = b[i];
+			if((a[j] < a[left[j]] + j - left[j]) or (a[j] > a[right[j]] - (-j + right[j]))){
+				marked[j] = 1;
 			}
 		}
 	}
-
-	return 1;
-}
-
-void solve(){
-	int n;
-	cin >> n;
-	vi a(n), sorted_a;
-	scnarr(a, n);
-	sorted_a = a;
+	for(int i = b[k -1]; i < n; ++i){
+		left[i] = b[k -1];
+		if(a[i] < a[left[i]] + i - left[i]){
+			marked[i] = 1;
+		}
+	}
 	
-	sort(all(sorted_a));
-	if(a == sorted_a){
-		cout << "YES\n";
-		return;
+	int res = 0, prev = b[0];
+	vi tmp;
+	for(int i = 0; i <= b[0]; ++i){
+		if(!marked[i])
+			tmp.push_back(a[i] - i);
+	}
+	res += lis(tmp) -1;
+	for(int i = 1; i < k; ++i){
+		vi temp;
+		for(int j = prev; j <= b[i]; ++j){
+			if(!marked[j]){
+				temp.push_back(a[j] - j);
+			}
+		}
+		res += lis(temp) -2;
+		prev = b[i];
 	}
 
-	reverse(all(sorted_a));
-	if(a == sorted_a){
-		cout << "YES\n";
-		return;
+	vi temp;
+	for(int i = prev; i < n; ++i){
+		if(!marked[i]){
+			temp.push_back(a[i] - i);
+		}
 	}
-
-	bool one = find_ans(a, n);
-	reverse(all(a));
-	bool two = find_ans(a, n);
-
-	if(one or two)
-		cout << "YES\n";
-	else
-		cout << "NO\n";
-
+	res += lis(temp) -1;
+	res += k;
+	cout << n - res << endl;
 	return;
 }
 
@@ -121,7 +150,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	// int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

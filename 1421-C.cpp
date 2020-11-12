@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -22,34 +22,18 @@ using namespace chrono;
 
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 405; // 1e6 +5
+const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-int dp[205][405];
-
-int rec(int pos, int t, int n, vi &a){
-	if(pos > n)
-		return 0;
-	if(t > 2*n)
-		return INF;
-	if(dp[pos][t] != -1)
-		return dp[pos][t];
-	return dp[pos][t] = min(rec(pos, t +1, n, a), rec(pos +1, t +1, n, a) + abs(a[pos] - t));
-}
-
 void solve(){
-	memset(dp, -1, sizeof dp);
-	int n;
-	cin >> n;
-	vi a(n +1);
-	for(int i = 1; i <= n; ++i) cin >> a[i];
+	string s;
+	cin >> s;
+	bool falg = 0;
+	int n = s.length();
 
-	sort(all(a));
+	cout << "3\nL 2\nR 2\nR " << (2 * n -1) << endl;
+		
 
-	bitset<MAXN> done(0);
-	cout << rec(1, 1, n, a) << endl;
-
-	return;
 }
 
 signed main()
@@ -59,7 +43,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	// int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }
@@ -79,3 +63,4 @@ fenwik - BIT
 binary_search
 segment_tree
 */
+	

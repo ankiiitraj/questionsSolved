@@ -47,7 +47,21 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
+const int INF = LLONG_MAX; // 1e15 +5
+
+int power(int x, int y){
+	int ans = 1;
+	while(y > 0){
+		if(y&1){
+			ans = (ans * x);
+			--y;
+		}else{
+			x = (x * x);
+			y /= 2;
+		}
+	}
+	return ans;
+}
 
 void solve(){
 	int p, q;
@@ -72,24 +86,23 @@ void solve(){
 		if(q > 2){
 			factors_cnt[q]++;
 		}
-		debug(factors_cnt);
-		int res = 1;
-		for(auto [ff, ss]: factors_cnt){
-			int temp_p = p, cnt = 0;
-			while(temp_p % ff == 0){
-				temp_p /= ff;
-				cnt++;
+
+		int res = INF;
+		
+		for(auto [f, s]: factors_cnt){
+			int temp_p = p, cur = 0;
+			while(temp_p % f == 0){
+				temp_p /= f;
+				cur++;
+				if(temp_p % q)
+					break;
 			}
-			if(cnt >= ss){
-				int div = cnt / ss;
-				cnt = div * ss;
-				int x = (int)(p / (int)pow(ff, cnt));
-				if(x % temp_q != 0)
-					res = max(res, x);
-			}
+			int dis = cur - s +1;
+			int total = (int)power((int)f, (int)dis);
+			res = min(res, total);
 		}
 
-		cout << res << endl;
+		cout << p / res << endl;
 
 	}
 

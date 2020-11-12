@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -21,34 +21,51 @@ using namespace chrono;
 /* -------------------------------Solution Sarted--------------------------------------*/
 
 //Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 405; // 1e6 +5
+const int MOD =  998244353; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-int dp[205][405];
-
-int rec(int pos, int t, int n, vi &a){
-	if(pos > n)
-		return 0;
-	if(t > 2*n)
-		return INF;
-	if(dp[pos][t] != -1)
-		return dp[pos][t];
-	return dp[pos][t] = min(rec(pos, t +1, n, a), rec(pos +1, t +1, n, a) + abs(a[pos] - t));
-}
-
 void solve(){
-	memset(dp, -1, sizeof dp);
-	int n;
-	cin >> n;
-	vi a(n +1);
-	for(int i = 1; i <= n; ++i) cin >> a[i];
+	int n, k, res = 1;
+	cin >> n >> k;
+	vi a(n), b(k);
+	scnarr(a, n);
+	scnarr(b, k);
 
-	sort(all(a));
+	vi m_a(n +1, -1), m_b(n +1, -1);
 
-	bitset<MAXN> done(0);
-	cout << rec(1, 1, n, a) << endl;
+	for(int i = 0; i < n; ++i){
+		m_a[a[i]] = i;
+		if(i < k){
+			m_b[b[i]] = i;
+		}
+	}
 
+	for(int i = 0; i < k; ++i){
+		int cur = b[i];
+		if(m_a[cur] != 0 and m_a[cur] != n -1){
+			int left = a[m_a[cur] -1], right = a[m_a[cur] +1];
+			if(m_b[left] < i and m_b[right] < i){
+				res = res * 2 % MOD;
+			}else if(m_b[left] > i and m_b[right] > i){
+				cout << "0\n";
+				return;
+			}
+		}else if(m_a[cur] == 0){
+			int right = a[m_a[cur] +1];
+			if(m_b[right] > i){
+				cout << "0\n";
+				return;
+			}
+		}else{
+			int left = a[m_a[cur] -1];
+			if(m_b[left] > i){
+				cout << "0\n";
+				return;
+			}
+		}
+	}
+	cout << res << endl;
 	return;
 }
 

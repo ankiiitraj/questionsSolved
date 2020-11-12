@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -22,32 +22,39 @@ using namespace chrono;
 
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 405; // 1e6 +5
+const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-int dp[205][405];
-
-int rec(int pos, int t, int n, vi &a){
-	if(pos > n)
-		return 0;
-	if(t > 2*n)
-		return INF;
-	if(dp[pos][t] != -1)
-		return dp[pos][t];
-	return dp[pos][t] = min(rec(pos, t +1, n, a), rec(pos +1, t +1, n, a) + abs(a[pos] - t));
-}
-
 void solve(){
-	memset(dp, -1, sizeof dp);
-	int n;
-	cin >> n;
-	vi a(n +1);
-	for(int i = 1; i <= n; ++i) cin >> a[i];
+	int x, y, c1, c2, c3, c4, c5, c6;
+	cin >> x >> y >> c1 >> c2 >> c3 >> c4 >> c5 >> c6;
 
-	sort(all(a));
+	int p1 = 0, p2 = 0, p3 = 0;
 
-	bitset<MAXN> done(0);
-	cout << rec(1, 1, n, a) << endl;
+	if(x > 0){
+		p1 += abs(x) * c6;
+		p3 += abs(x) * c1;
+	}else{
+		p1 += abs(x) * c3;
+		p3 += abs(x) * c4;
+	}
+	if(y > 0){
+		p1 += abs(y) * c2;
+		p2 += abs(y) * c1;
+	}else{
+		p1 += abs(y) * c5;
+		p2 += abs(y) * c4;
+	}
+
+	if(x > y){
+		p2 += abs(x - y) * c6;
+		p3 += abs(x - y) * c5;
+	}else{
+		p2 += abs(x - y) * c3;
+		p3 += abs(x - y) * c2;
+	}
+
+	cout << min({p1, p2, p3}) << endl;
 
 	return;
 }

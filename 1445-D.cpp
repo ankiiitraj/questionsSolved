@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 #include <time.h>
-#define int long long int
+#define int unsigned long long int
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -21,33 +21,54 @@ using namespace chrono;
 /* -------------------------------Solution Sarted--------------------------------------*/
 
 //Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 405; // 1e6 +5
+const int MOD = 998244353; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-int dp[205][405];
-
-int rec(int pos, int t, int n, vi &a){
-	if(pos > n)
-		return 0;
-	if(t > 2*n)
-		return INF;
-	if(dp[pos][t] != -1)
-		return dp[pos][t];
-	return dp[pos][t] = min(rec(pos, t +1, n, a), rec(pos +1, t +1, n, a) + abs(a[pos] - t));
+int power(int x, int y){
+	int ans = 1;
+	while(y > 0){
+		if(y&1){
+			ans = (ans * x)%MOD;
+			--y;
+		}else{
+			x = (x * x)%MOD;
+			y /= 2;
+		}
+	}
+	return ans;
 }
 
 void solve(){
-	memset(dp, -1, sizeof dp);
-	int n;
+	int n, sum, first = 0, second = 0;
 	cin >> n;
-	vi a(n +1);
-	for(int i = 1; i <= n; ++i) cin >> a[i];
-
+	vi a(2*n);
+	scnarr(a, 2*n);
 	sort(all(a));
+	for(int i = 0; i < n; ++i){
+		first += a[i];
+		second += a[2*n -1 -i];
+	}
 
-	bitset<MAXN> done(0);
-	cout << rec(1, 1, n, a) << endl;
+	sum = second - first;
+	sum = sum % MOD;
+
+	int num = 1, deno;
+	for(int i = 1; i <= 2*n; ++i){
+		num = num * i % MOD;
+		if(i == n){
+			deno = num;
+		}
+	}
+
+	deno = deno * deno % MOD;
+
+	int modInv = power(deno, MOD -2);
+
+	num = num * modInv % MOD;
+	num = num * sum % MOD;
+
+	cout << num << endl;
 
 	return;
 }
@@ -59,7 +80,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	// int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }
