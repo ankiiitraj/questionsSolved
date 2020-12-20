@@ -19,11 +19,6 @@ using namespace chrono;
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
-
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -49,62 +44,83 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
-/*------- sum of elements in range 1 to pos (1-Based Indexing) -------*/
-
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
+const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int n, cnt = 0, x;
+	int n, q, r, cnt = 0, sum = 0;
 	cin >> n;
+	vi a(n), pref(n), ferp(n, 0);
+	scnarr(a, n);
 
-	vii q;
-	char ty;
-	for(int i = 0; i < 2 * n; ++i){
-		cin >> ty;
-		if(ty == '+'){
-			q.push_back({0, 0});
-		}else{
-			cin >> x;
-			q.push_back({1, x});
+	if(n == 1){
+		cin >> q;
+		while(q--){
+			cin >> r;
+			cout << ((a[0] - (!(a[0]&1))) * r) << endl;
 		}
+		return;
+	}
 
-	}	
-
-	vi res(n, -1);
-	stack<pair<int, int>> last;
-	for(int i = 0; i < 2 * n; ++i){
-		if(!q[i].first){
-			last.push({-1, cnt});
+	bool flag = (a[0] == 1);
+	sum += a[0];
+	pref[0] = a[0] - (a[0]&1) + flag;
+	cnt += flag;
+	for(int i = 1; i < n -1; ++i){
+		if(a[i] == 1 and !flag){
+			sum += 1;
+			ferp[i] = ferp[i -1];
+			pref[i] = pref[i -1] +1;
+			flag = 1;
 			cnt++;
+		}else if(a[i] > 1 and !flag){
+			ferp[i] = ferp[i -1];
+			pref[i] = pref[i -1] + a[i] - (a[i]&1); 
+			sum += a[i] - (a[i]&1);
+		}else if(a[i] == 1 and flag){
+			flag = 0;
+			cnt++;
+			ferp[i] = ferp[i -1] +1;
+			pref[i] = pref[i -1];
+			sum += 1;
 		}else{
-			x = q[i].second;
-			if(last.empty()){
-				cout << "NO\n";
-				return;
-			}
-			if(last.top().first < x){
-				res[last.top().second] = x;
-				pii temp = last.top();
-				last.pop();
-				if(last.empty()){
-					continue;
-				}else{
-					temp = last.top();
-					last.pop();
-				}
-				last.push({max(x, temp.first), temp.second});
-			}else{
-				cout << "NO\n";
-				return;
-			}
+			sum += a[i] - (a[i]&1);
+			ferp[i] = ferp[i -1] + a[i] - (a[i]&1);
+			pref[i] = pref[i -1];
 		}
 	}
-
-	cout << "YES\n";
-	for(auto itr: res){
-		cout << itr << " ";
-		
+	if(!flag){
+		pref[n -1] = pref[n -2] + a[n -1] - (!(a[n -1]&1));
+		ferp[n -1] = ferp[n -2];
+	}else{
+		ferp[n -1] = ferp[n -2] + a[n -1] - (!(a[n -1]&1));
+		pref[n -1] = pref[n -2];
 	}
-	cout << endl;
+	sum += a[n -1] - (!(a[n -1]&1));
+
+	cin >> q;
+	while(q--){
+		cin >> r;
+
+		if(cnt%2 == 0){
+			cout << (pref[n -1] * (int)(r/n) + (r % n != 0 ? pref[r % n -1] : 0)) << endl;
+		}else{
+			int res = sum * (int)((r / n)/2);
+			if((int)((r / n) % 2) == 0){
+				if(r % n != 0){
+					res += pref[r % n -1];
+				}
+			}else{
+				res += pref[n -1];
+				if(r % n != 0){
+					res += ferp[r % n -1];
+				}
+			}
+			cout << res << endl;
+		}
+	}
 
 	return;
 }
@@ -116,7 +132,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

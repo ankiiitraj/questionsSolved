@@ -19,11 +19,6 @@ using namespace chrono;
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
-
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -49,63 +44,34 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
-/*------- sum of elements in range 1 to pos (1-Based Indexing) -------*/
-
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
+const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int n, cnt = 0, x;
-	cin >> n;
+	int n, k;
+	cin >> n >> k;
+	vii points(n);
+	for(int i = 0; i < n; ++i){
+		cin >> points[i].first >> points[i].second;
+	}
 
-	vii q;
-	char ty;
-	for(int i = 0; i < 2 * n; ++i){
-		cin >> ty;
-		if(ty == '+'){
-			q.push_back({0, 0});
-		}else{
-			cin >> x;
-			q.push_back({1, x});
+	for(int i = 0; i < n; ++i){
+		int cnt = 0;
+		for(int j = 0; j < n; ++j){
+			if(i != j){
+				if(abs(points[i].first - points[j].first) + abs(points[i].second - points[j].second) <= k)
+					cnt++;
+			}
 		}
-
-	}	
-
-	vi res(n, -1);
-	stack<pair<int, int>> last;
-	for(int i = 0; i < 2 * n; ++i){
-		if(!q[i].first){
-			last.push({-1, cnt});
-			cnt++;
-		}else{
-			x = q[i].second;
-			if(last.empty()){
-				cout << "NO\n";
-				return;
-			}
-			if(last.top().first < x){
-				res[last.top().second] = x;
-				pii temp = last.top();
-				last.pop();
-				if(last.empty()){
-					continue;
-				}else{
-					temp = last.top();
-					last.pop();
-				}
-				last.push({max(x, temp.first), temp.second});
-			}else{
-				cout << "NO\n";
-				return;
-			}
+		if(cnt == n -1){
+			cout << "1\n";
+			return;
 		}
 	}
 
-	cout << "YES\n";
-	for(auto itr: res){
-		cout << itr << " ";
-		
-	}
-	cout << endl;
-
+	cout << "-1\n";
 	return;
 }
 
@@ -116,7 +82,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

@@ -19,11 +19,6 @@ using namespace chrono;
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
-
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -49,63 +44,76 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
-/*------- sum of elements in range 1 to pos (1-Based Indexing) -------*/
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
+const int INF = 100000000000005; // 1e15 +5
 
 
 void solve(){
-	int n, cnt = 0, x;
-	cin >> n;
+	int n, k;
+	string a, b, newb;
+	cin >> n >> k >> a >> b;
 
-	vii q;
-	char ty;
-	for(int i = 0; i < 2 * n; ++i){
-		cin >> ty;
-		if(ty == '+'){
-			q.push_back({0, 0});
-		}else{
-			cin >> x;
-			q.push_back({1, x});
-		}
+	map<char, int> ma, mb;
+	for(int i = 0; i < n; ++i){
+		ma[a[i]]++;
+		mb[b[i]]++;
+	}
 
-	}	
+	if(ma == mb){
+		cout << "Yes\n";
+		return;
+	}
 
-	vi res(n, -1);
-	stack<pair<int, int>> last;
-	for(int i = 0; i < 2 * n; ++i){
-		if(!q[i].first){
-			last.push({-1, cnt});
-			cnt++;
-		}else{
-			x = q[i].second;
-			if(last.empty()){
-				cout << "NO\n";
-				return;
-			}
-			if(last.top().first < x){
-				res[last.top().second] = x;
-				pii temp = last.top();
-				last.pop();
-				if(last.empty()){
-					continue;
-				}else{
-					temp = last.top();
-					last.pop();
-				}
-				last.push({max(x, temp.first), temp.second});
+	if(ma.begin()->first > mb.begin()->first){
+		cout << "No\n";
+		return;
+	}
+	mb.clear();
+	for(int i = 0; i < n; ++i){
+		if(ma.count(b[i])){
+			if(ma[b[i]]){
+				ma[b[i]]--;
 			}else{
-				cout << "NO\n";
+				mb[b[i]]++;
+			}
+			if(!ma[b[i]]){
+				ma.erase(b[i]);
+			}
+		}else{
+			mb[b[i]]++;
+		}
+	}
+
+	auto ita = ma.begin(), itb = mb.begin();
+	while(1){
+		if(ita == ma.end() or itb == mb.end()){
+			break;
+		}
+		if(ita->first > itb->first){
+			cout << "No\n";
+			return;
+		}else{
+			if(ita->second % k != 0 or itb->second % k != 0){
+				cout << "No\n";
 				return;
+			}else{
+				if(ita->second > itb->second){
+					ita->second -= itb->second;
+					if(ita->second == 0){
+						ita++;
+					}
+
+					itb++;
+				}else{
+					ita++;
+				}
 			}
 		}
 	}
 
-	cout << "YES\n";
-	for(auto itr: res){
-		cout << itr << " ";
-		
-	}
-	cout << endl;
-
+	cout << "Yes\n";
 	return;
 }
 
@@ -116,7 +124,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

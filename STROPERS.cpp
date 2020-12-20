@@ -19,11 +19,6 @@ using namespace chrono;
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
-
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -49,62 +44,61 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
-/*------- sum of elements in range 1 to pos (1-Based Indexing) -------*/
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int P = 9999999;
+const int MAXN = 1005; // 1e6 +5
+const int INF = 100000000000005; // 1e15 +5
 
+vi powersOfP(MAXN, 1);
+
+vi buildHash(string s, int n){
+	vi res(n +1, 0);
+	for(int i = 1; i <= n; ++i){
+		res[i] = (res[i -1] + s[i] * powersOfP[i -1] % MOD) % MOD;
+	}
+	return res;
+}
+
+int getHash(vi hashVec, int p, int len, int n){
+	int res = (hashVec[p + len -1] - hashVec[p -1] + MOD) % MOD;
+	return res * powersOfP[n - p] % MOD;
+}
 
 void solve(){
-	int n, cnt = 0, x;
-	cin >> n;
-
-	vii q;
-	char ty;
-	for(int i = 0; i < 2 * n; ++i){
-		cin >> ty;
-		if(ty == '+'){
-			q.push_back({0, 0});
-		}else{
-			cin >> x;
-			q.push_back({1, x});
-		}
-
-	}	
-
-	vi res(n, -1);
-	stack<pair<int, int>> last;
-	for(int i = 0; i < 2 * n; ++i){
-		if(!q[i].first){
-			last.push({-1, cnt});
-			cnt++;
-		}else{
-			x = q[i].second;
-			if(last.empty()){
-				cout << "NO\n";
-				return;
-			}
-			if(last.top().first < x){
-				res[last.top().second] = x;
-				pii temp = last.top();
-				last.pop();
-				if(last.empty()){
-					continue;
-				}else{
-					temp = last.top();
-					last.pop();
-				}
-				last.push({max(x, temp.first), temp.second});
-			}else{
-				cout << "NO\n";
-				return;
-			}
-		}
+	string s, revS;
+	cin >> s;
+	int n = s.length();
+	string ones(n, '1'), zeroes(n, '0');
+	if(s == ones or s == zeroes){
+		cout << n << endl;
+		return;
 	}
 
-	cout << "YES\n";
-	for(auto itr: res){
-		cout << itr << " ";
-		
+	int res = 3;
+	revS = s;
+	reverse(all(revS));
+	revS = '!' + revS;
+	s = '!' + s;
+	
+	vi oneCount(n +1, 0);
+	for(int i = 1; i <= n; ++i){
+		oneCount[i] = oneCount[i -1] + s[i] - '0';
 	}
-	cout << endl;
+
+	vi pref = buildHash(s, n), suf = buildHash(revS, n);
+	for(int i = 2; i < n; ++i){
+		sii temp; 
+		for(int j = 1, k = n - i +1; j <= n - i +1; ++j, --k){
+			int f = getHash(pref, j, i, n), b = getHash(suf, k, i, n);
+			if((oneCount[j + i -1] - oneCount[j -1])&1)
+				b = INF;
+			temp.insert({ min(f, b), max(f, b) });
+		}
+		res += temp.size();
+	}
+
+	cout << res << endl;
 
 	return;
 }
@@ -116,7 +110,10 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	for(int i = 1; i < MAXN; ++i){
+		powersOfP[i] = powersOfP[i -1] * P % MOD;
+	}
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

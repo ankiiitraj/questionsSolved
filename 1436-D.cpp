@@ -56,14 +56,28 @@ vi dfs(int s, vi adj[], vi &a){
 		return {1, a[s], 0};
 	}
 
-
+	int _max = 0, leaves = 0;
+	vector<vi> sub;
 	for(auto itr: adj[s]){
 		vi temp = dfs(itr, adj, a);
 		leaves += temp[0];
+		_max = max(_max, temp[1]);
+		sub.push_back(temp);
+	}
+	int req = 0;
+	for(auto itr: sub){
+		req += itr[2] + (_max - itr[1]) * itr[0];
+	}
+	int people = min(a[s], req);
+	a[s] -= people;
+	req -= people;
+
+	if(a[s] > 0){
+		req = a[s] % leaves == 0 ? 0 : leaves - a[s] % leaves;
+		_max += (a[s] + leaves -1) / leaves;
 	}
 
-
-	return {leaves, , };
+	return {leaves, _max, req};
 }
 
 
@@ -82,7 +96,7 @@ void solve(){
 		adj[p[i]].push_back(i);
 	}
 
-	int res = dfs(1, adj, a);
+	int res = dfs(1, adj, a)[1];
 
 	cout << res << endl;
 	return;

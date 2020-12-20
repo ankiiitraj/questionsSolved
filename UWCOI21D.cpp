@@ -15,8 +15,8 @@
 using namespace std;
 using namespace chrono;
 /*
-    ----------------------------------------------------------------------
-    Things to remember : check for coners n = 1, pass references instead
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
@@ -25,22 +25,54 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-void solve(int arr[]){
-    arr[0] = -1;
-    return;
+void solve(){
+	int n, m, k, xi, yi, xf, yf, res = 0;
+	cin >> n >> m >> k;
+
+	if(k <= 10){
+		vector<vi> q(k, vi(4));
+		for(int i = 0; i < k; ++i){
+			for(int j = 0; j < 4; ++j)
+				cin >> q[i][j];
+		}
+		int cur = INF;
+		for(int i = 1; i <= m; ++i){
+			int cur_res = 0;
+			for(int j = 0; j < k; ++j){
+				xi = q[j][0], yi = q[j][1], xf = q[j][2], yf = q[j][3];
+				cur_res += min(
+					abs(xi - xf) + 2 * (abs(yf - i) + abs(yi - i)),
+					2 * abs(xi - xf) + 2 * (abs(yf - yi))
+				);	
+			}
+			cur = min(cur, cur_res);
+		}
+
+		res = cur;
+	}else{
+		for(int i = 0; i < k; ++i){
+			cin >> xi >> yi >> xf >> yf;
+			res += (2 * abs(yf - yi) + abs(xi - xf));
+		}
+	}
+
+
+	cout << res << endl;
+
+
+	return;
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int arr[5] = {0};
-    solve(arr);
-    cout << arr[0] << "\n";
-    return 0;
+	// int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 

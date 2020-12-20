@@ -19,11 +19,6 @@ using namespace chrono;
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
-
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -49,62 +44,67 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
-/*------- sum of elements in range 1 to pos (1-Based Indexing) -------*/
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 200005;
+const int INF = 100000000000005; // 1e15 +5
 
+vi fact(MAXN);
+
+int power(int x, int y){
+	int ans = 1;
+	while(y > 0){
+		if(y&1){
+			ans = (ans * x)%MOD;
+			--y;
+		}else{
+			x = (x * x)%MOD;
+			y /= 2;
+		}
+	}
+	return ans;
+}
+
+int nCr(int n, int r){
+	int num = fact[n];
+	int deno = fact[r] * fact[n - r] % MOD;
+	deno = power(deno, MOD -2);
+	int res = num * deno % MOD;
+
+	return res;
+
+}
 
 void solve(){
-	int n, cnt = 0, x;
-	cin >> n;
-
-	vii q;
-	char ty;
-	for(int i = 0; i < 2 * n; ++i){
-		cin >> ty;
-		if(ty == '+'){
-			q.push_back({0, 0});
-		}else{
-			cin >> x;
-			q.push_back({1, x});
-		}
-
-	}	
-
-	vi res(n, -1);
-	stack<pair<int, int>> last;
-	for(int i = 0; i < 2 * n; ++i){
-		if(!q[i].first){
-			last.push({-1, cnt});
-			cnt++;
-		}else{
-			x = q[i].second;
-			if(last.empty()){
-				cout << "NO\n";
-				return;
-			}
-			if(last.top().first < x){
-				res[last.top().second] = x;
-				pii temp = last.top();
-				last.pop();
-				if(last.empty()){
-					continue;
-				}else{
-					temp = last.top();
-					last.pop();
-				}
-				last.push({max(x, temp.first), temp.second});
-			}else{
-				cout << "NO\n";
-				return;
-			}
-		}
+	int n, m, k, res = 0;
+	cin >> n >> m >> k;
+	vi a(n);
+	scnarr(a, n);
+	sort(all(a));
+	// debug(a);
+	mii mm, mmm;
+	for(int i = 0; i < n; ++i){
+		mm[a[i]] = i;
+		if(!mmm.count(a[i]))
+			mmm[a[i]] = i;
 	}
 
-	cout << "YES\n";
-	for(auto itr: res){
-		cout << itr << " ";
-		
+	for(int i = 0; i <= n - m; ++i){
+		int req = k + a[i];
+		auto itr = mmm.upper_bound(req);
+		int idx;
+		if(itr != mmm.end()){
+			idx = itr->second;
+		}else{
+			idx = n;
+		}
+		int cnt = idx - i -1;
+		if(cnt +1 >= m){
+			res = (res + nCr(cnt, m -1)) % MOD;
+		}
+
 	}
-	cout << endl;
+	cout << res << endl;
 
 	return;
 }
@@ -116,7 +116,11 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	fact[0] = 1;
+	for(int  i = 1; i < MAXN; ++i){
+		fact[i] = fact[i -1] * i % MOD;
+	}
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }
@@ -136,3 +140,4 @@ fenwik - BIT
 binary_search
 segment_tree
 */
+	

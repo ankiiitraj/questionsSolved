@@ -19,11 +19,6 @@ using namespace chrono;
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
-
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -49,63 +44,55 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
-/*------- sum of elements in range 1 to pos (1-Based Indexing) -------*/
-
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
+const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int n, cnt = 0, x;
+	int n;
 	cin >> n;
 
-	vii q;
-	char ty;
-	for(int i = 0; i < 2 * n; ++i){
-		cin >> ty;
-		if(ty == '+'){
-			q.push_back({0, 0});
-		}else{
-			cin >> x;
-			q.push_back({1, x});
-		}
+	mii m;
+	int temp = n;
 
-	}	
+	while(temp % 2 == 0){
+		temp /= 2;
+		m[2]++;
+	}
 
-	vi res(n, -1);
-	stack<pair<int, int>> last;
-	for(int i = 0; i < 2 * n; ++i){
-		if(!q[i].first){
-			last.push({-1, cnt});
-			cnt++;
-		}else{
-			x = q[i].second;
-			if(last.empty()){
-				cout << "NO\n";
-				return;
-			}
-			if(last.top().first < x){
-				res[last.top().second] = x;
-				pii temp = last.top();
-				last.pop();
-				if(last.empty()){
-					continue;
-				}else{
-					temp = last.top();
-					last.pop();
-				}
-				last.push({max(x, temp.first), temp.second});
-			}else{
-				cout << "NO\n";
-				return;
-			}
+	for(int i = 3; i * i <= n; i += 2){
+		while(temp % i == 0){
+			temp /= i;
+			m[i]++;
 		}
 	}
 
-	cout << "YES\n";
-	for(auto itr: res){
-		cout << itr << " ";
-		
+	if(temp > 1){
+		m[temp]++;
 	}
-	cout << endl;
 
+
+	int cur = -1, res, num = 1;
+
+	for(auto [f, s]: m){
+		if(s > cur){
+			res = f;
+			cur = s;
+		}
+	}
+
+	cout << cur << endl;
+
+	for(int i = 0; i < cur -1; ++i){
+		cout << res << " ";
+		num *= res;
+	}
+
+	if((n / res) != 1 or cur == 1)
+		cout << (n / num) << endl;
+	else
+		cout << endl;
 	return;
 }
 
@@ -116,7 +103,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

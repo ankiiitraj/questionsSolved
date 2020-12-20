@@ -15,8 +15,8 @@
 using namespace std;
 using namespace chrono;
 /*
-    ----------------------------------------------------------------------
-    Things to remember : check for coners n = 1, pass references instead
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
@@ -25,22 +25,54 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-void solve(int arr[]){
-    arr[0] = -1;
-    return;
+int find(string a, string b){
+	int n = a.length(), res = 0;
+	for(int i = 0; i < n; ++i){
+		if(a[i] != b[i]){
+			int j = i +1;
+			while(j < n and a[j] != b[j]){
+				++j;
+			}
+			res++;
+			i = j -1;
+		}
+	}
+	return res;
+}
+
+void solve(){
+	string a, b, za, zb, oa, ob;
+	cin >> a >> b;
+
+	int n = a.length(), res = 0;
+
+	for(int i = 0; i < n; i += 2){
+		za += a[i];
+		zb += b[i];
+	}
+
+	for(int i = 1; i < n; i += 2){
+		oa += a[i];
+		ob += b[i];
+	}
+
+	res = find(za, zb) + find(oa, ob);
+
+	cout << res << endl;
+
+	return;
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int arr[5] = {0};
-    solve(arr);
-    cout << arr[0] << "\n";
-    return 0;
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 

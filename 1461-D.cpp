@@ -19,11 +19,6 @@ using namespace chrono;
 	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
-
-//Constants
-const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
 void __print(unsigned x) {cerr << x;}
@@ -49,62 +44,56 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #else
 #define debug(x...)
 #endif
-/*------- sum of elements in range 1 to pos (1-Based Indexing) -------*/
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
+const int INF = 100000000000005; // 1e15 +5
 
+void rec(vi a, int n, si &s){
+	if(n == 0)
+		return;
+	vi b(n, a[0]);
+	if(a == b){
+		s.insert(a[0] * n);
+		return;
+	}
+
+	int mid = (*max_element(all(a)) + *min_element(all(a)))/2;
+	vi l, r;
+	int lsum = 0, rsum = 0;
+	for(int i = 0; i < n; ++i){
+		if(a[i] <= mid)
+			l.push_back(a[i]), lsum += a[i];
+		else
+			r.push_back(a[i]), rsum += a[i];
+	}
+	s.insert(lsum);
+	s.insert(rsum);
+	
+	rec(l, l.size(), s);
+	rec(r, r.size(), s);
+	return;
+}
 
 void solve(){
-	int n, cnt = 0, x;
-	cin >> n;
-
-	vii q;
-	char ty;
-	for(int i = 0; i < 2 * n; ++i){
-		cin >> ty;
-		if(ty == '+'){
-			q.push_back({0, 0});
+	int n, q, sum = 0;
+	cin >> n >> q;
+	vi a(n), b;
+	scnarr(a, n);
+	b = a;
+	si s;
+	for(int i = 0; i < n; ++i)
+		sum += a[i];
+	s.insert(sum);
+	rec(b, n, s);
+	while(q--){
+		cin >> sum;
+		if(s.count(sum)){
+			cout << "Yes\n";
 		}else{
-			cin >> x;
-			q.push_back({1, x});
-		}
-
-	}	
-
-	vi res(n, -1);
-	stack<pair<int, int>> last;
-	for(int i = 0; i < 2 * n; ++i){
-		if(!q[i].first){
-			last.push({-1, cnt});
-			cnt++;
-		}else{
-			x = q[i].second;
-			if(last.empty()){
-				cout << "NO\n";
-				return;
-			}
-			if(last.top().first < x){
-				res[last.top().second] = x;
-				pii temp = last.top();
-				last.pop();
-				if(last.empty()){
-					continue;
-				}else{
-					temp = last.top();
-					last.pop();
-				}
-				last.push({max(x, temp.first), temp.second});
-			}else{
-				cout << "NO\n";
-				return;
-			}
+			cout << "No\n";
 		}
 	}
-
-	cout << "YES\n";
-	for(auto itr: res){
-		cout << itr << " ";
-		
-	}
-	cout << endl;
 
 	return;
 }
@@ -116,7 +105,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

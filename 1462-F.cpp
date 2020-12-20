@@ -15,8 +15,8 @@
 using namespace std;
 using namespace chrono;
 /*
-    ----------------------------------------------------------------------
-    Things to remember : check for coners n = 1, pass references instead
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
@@ -25,22 +25,44 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-void solve(int arr[]){
-    arr[0] = -1;
-    return;
+void solve(){
+	int n, x, y, res = INF;
+	cin >> n;
+	vii points;
+	vi xcors, ycors;
+
+	for(int i = 0; i < n; ++i){
+		cin >> x >> y;
+		points.push_back({x, y});
+		xcors.push_back(x);
+		ycors.push_back(y);
+	}
+
+	sort(all(xcors));
+	sort(all(ycors));
+
+	for(auto [f, s]: points){
+		int sDist = abs(distance(upper_bound(all(ycors), f -1), ycors.begin()));
+		int eDist = abs(distance(xcors.end(), upper_bound(all(xcors), s)));
+		// cout << sDist << " " << eDist << endl;
+		res = min(res, sDist + eDist);
+	}
+	
+	cout << res << endl;
+
+	return;
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int arr[5] = {0};
-    solve(arr);
-    cout << arr[0] << "\n";
-    return 0;
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 

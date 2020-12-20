@@ -15,32 +15,53 @@
 using namespace std;
 using namespace chrono;
 /*
-    ----------------------------------------------------------------------
-    Things to remember : check for coners n = 1, pass references instead
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
 */
 /* -------------------------------Solution Sarted--------------------------------------*/
 
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-const int INF = 100000000000005; // 1e15 +5
+const int INF = 1e18; // 1e18
 
-void solve(int arr[]){
-    arr[0] = -1;
-    return;
+void solve(){
+	int k, x, res = INF, a, b, tmp, sum, flag;
+	cin >> k >> x;
+
+    flag = sum = 0;
+    for(long long i=2; i*i<=x; ++i)
+    {
+        if(x%i==0)
+        {
+            tmp = 1;
+            ++flag;
+            for(;x%i==0;x/=i)
+                tmp *= i;
+            sum += tmp;
+        }
+    }
+    if(x > 1)
+    {
+        ++flag;
+        sum += x;
+    }
+
+    cout << sum + k - flag << endl;
+
+	return;
 }
 
 signed main()
 {
-    faster;
+	faster;
 #ifndef ONLINE_JUDGE
-    freopen("ip.txt", "r", stdin);
-    freopen("op.txt", "w", stdout);
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
 #endif
-    int arr[5] = {0};
-    solve(arr);
-    cout << arr[0] << "\n";
-    return 0;
+	int t; cin >> t; while(t--)
+		solve();
+	return 0;
 }
 
 
