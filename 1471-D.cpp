@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include <time.h>
-// #define int long long int
+#define int long long int
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
@@ -23,57 +23,73 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-const int INF = 1000000005; // 1e15 +5
-int _max;
+const int INF = 100000000000005; // 1e15 +5
 
-vector<vector<int>> dp;
 
-int rec(int cost, int pos, int x, int n, vi &a){
-	if(pos == n){
-		if(is_sorted(all(a)))
-			return cost;
-		return INF;
+bool isNotPrime[MAXN +1];
+vi primes, spf(MAXN +1); // spf - Smallest prime factor of a number
+void sieve(){
+	memset(isNotPrime, 0, sizeof(isNotPrime));
+
+	spf[1] = 1;
+	for(int i = 2; i <= MAXN; i++)
+		spf[i] = i;
+
+	for(int i = 2; i <= MAXN; i+=2)
+		spf[i] = 2;
+
+	isNotPrime[0] = isNotPrime[1] = 1; 
+	for(int i = 2; i*i <= MAXN; ++i){
+		if(isNotPrime[i] == false){
+			spf[i] = i;
+			primes.push_back(i);
+			for(int j = i*i; j <= MAXN; j += i){
+				isNotPrime[j] = 1;
+				if(spf[j] == j)
+					spf[j] = i;
+			}
+		}
 	}
-	if(dp[pos][x] != -1)
-		return dp[pos][x];
+}
 
-	int two = INF;
-	if(a[pos] > x){
-		swap(a[pos], x);
-		two = rec(cost +1, pos +1, x, n, a);
-		swap(a[pos], x);
+mii prime_factorization(int val){
+	if(val == 1){
+		mii temp;
+		return temp;
 	}
-	int one = rec(cost, pos +1, x, n, a);
-	dp[pos][x] = min(one, two);
-	return dp[pos][x];
+	mii res;
+	while(val != 1){
+		res[spf[val]]++;
+		val /= spf[val];
+	}
+	return res;
 }
 
 
-void solve(){
-	dp = vector<vi>(505, vi(505, -1));
-	int n, x;
-	cin >> n >> x;
-	vi a(n);
-	for(int i = 0; i < n; ++i) cin >> a[i];
-	_max = *max_element(all(a));
-	int res = rec(0, 0, x, n, a);
-	if(res > n){
-		cout << "-1\n";
-		return;
-	}
 
-	cout << res << endl;
+void solve(){
+	int n;
+	cin >> n;
+	vi a(n);
+	scnarr(a, n);
+
+	multiset<mii> m;
+
+	for(int i = 0; i < n; ++i){
+		m.insert(prime_factorization(a[i]));
+	}
 
 	return;
 }
 
-int main()
+signed main()
 {
 	faster;
 #ifndef ONLINE_JUDGE
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
+	sieve();
 	int t; cin >> t; while(t--)
 		solve();
 	return 0;

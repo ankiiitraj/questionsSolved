@@ -50,44 +50,43 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int k;
 	string s;
-	cin >> s >> k;
+	cin >> s;
 	int n = s.length();
+	
+	int mask(0), newMask(0);
 
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
+	for(int i = 0; i < n; ++i){
+		if(s[i] != '?')
+			mask = (1LL << (s[i] - 'a')) ^ mask;
 	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
+	int cnt = 0, res = 0;
+	unordered_map<int, int> m;
+	m[0]++;
+	
+	for(int i = 0; i < n; ++i){
+		if(s[i] != '?')
+			newMask = (1LL << (s[i] - 'a')) ^ newMask;
+		else
+			cnt++;
+		if(cnt&1){
+			for(int j = 0; j < 26; ++j){
+				int tempMask = mask;
+				if(cnt&1){
+					tempMask = (1LL << j) ^ tempMask;
+					if(m.count(tempMask ^ newMask)){
+						res += m[tempMask ^ newMask];
+					}
+				}
+			}
 		}else{
-			break;
+			res = m.count(newMask ^ mask) ? res +1 : res;
 		}
-		++i;
+		// cout << res << " ";
+		m[newMask]++;
 	}
 
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
-		}
-	}
-	cout << include.size() << endl;
+
 	cout << res << endl;
 
 	return;
@@ -100,7 +99,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

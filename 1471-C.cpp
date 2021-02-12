@@ -50,44 +50,29 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
-
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
-	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
+	int n, m, res = 0;
+	cin >> n >> m;
+	vi k(n), c(m);
+	scnarr(k, n);
+	scnarr(c, m);
+	for(int i = 0; i < n; ++i) k[i]--;
+	sort(all(k));
+	reverse(all(k));
+	
+	int curItr = 0;
+	for(int i = 0; i < n; ++i){
+		if(curItr > k[i]){
+			res += c[k[i]];
 		}else{
-			break;
+			if(c[k[i]] <= c[curItr]){
+				res += c[k[i]];
+			}else{
+				res += c[curItr];
+				curItr++;
+			}
 		}
-		++i;
 	}
 
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
-		}
-	}
-	cout << include.size() << endl;
 	cout << res << endl;
 
 	return;
@@ -100,7 +85,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

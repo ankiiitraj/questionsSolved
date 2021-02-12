@@ -49,46 +49,59 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+pii dfs(vi &visited, vi adj[], int s, int p){
+	visited[s] = 1;
+	pii res = {1, 0};
+	for(auto itr: adj[s]){
+		if(itr != p){
+			if(visited[itr] == 1){
+				res.second = 1;
+			}else{
+				pii temp = dfs(visited, adj, itr, s);
+				res.first += temp.first;
+				res.second |= temp.second;
+			}
+		}
+	}
+	return res;
+}
+
+
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
+	int n, m, x, y;
+	cin >> n >> m;
+	map<pii, int> pos;
+	vii cors;
+    for(int i = 0; i < n; ++i) pos[{i +1, i +1}] = i +1;
+    for(int i = 0; i < m; ++i){
+    	cin >> x >> y;
+    	if(x == y){
+    		continue;
+    	}
+    	cors.push_back({x, y});
+    	pos[cors.back()] = i + n +1;
+    }
+    vi adj[n + m +1];
+    for(auto itr: cors){
+    	adj[pos[itr]].push_back(pos[{itr.first, itr.first}]);
+    	adj[pos[{itr.first, itr.first}]].push_back(pos[itr]);
+    	adj[pos[itr]].push_back(pos[{itr.second, itr.second}]);
+    	adj[pos[{itr.second, itr.second}]].push_back(pos[itr]);
+    }
 
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
+    int res = 0;
+    vi visited(n + m +1, 0);
 
-	for(char c: s){
-		m[c]++;
-	}
+    for(int i = n +1; i <= n + m; ++i){
+    	if(!visited[i]){
+	    	pii temp = dfs(visited, adj, i, -1);
+	    	// debug(temp);
+	    	res += temp.first/2;
+	    	res += temp.second;
+    	}
+    }
 
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
-		}else{
-			break;
-		}
-		++i;
-	}
-
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
-		}
-	}
-	cout << include.size() << endl;
-	cout << res << endl;
+    cout << res << endl;
 
 	return;
 }
@@ -100,7 +113,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

@@ -50,46 +50,46 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
-
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
-	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
-		}else{
-			break;
+	int n;
+	cin >> n;
+	vi a(2*n);
+	scnarr(a, 2*n);
+	mii m;
+	for(int i = 0; i < 2*n; ++i){
+		if(a[i] & 1){
+			cout << "NO\n";
+			return;
 		}
-		++i;
+		m[a[i]]++;
 	}
-
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
+	a.clear();
+	for(auto itr: m){
+		if(itr.second & 1){
+			cout << "NO\n";
+			return;
+		}
+		int cnt = itr.second;
+		while(cnt){
+			a.push_back(itr.first);
+			cnt -= 2;
 		}
 	}
-	cout << include.size() << endl;
-	cout << res << endl;
 
+	sort(all(a));
+	reverse(all(a));
+	int sub = 0;
+	debug(a);
+	n *= 2;
+	for(int i = 0; i < n/2; ++i){
+		int cur = (a[i] - sub)/(2*i - n +1);
+		cout << cur << " ";
+		if(cur * (2*i - n +1) != a[i] - sub){
+			cout << "NO\n";
+			return;
+		}
+		sub -= cur;
+	}
+	cout << "YES\n";
 	return;
 }
 
@@ -100,7 +100,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

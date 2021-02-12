@@ -49,47 +49,53 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
-
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
+	int n;
+	cin >> n;
+	vi a(2*n);
+	scnarr(a, 2*n);
+	sort(all(a));
+	int m = 2*n;
+	mii mm;
+	for(int i = 0; i < m; ++i){
+		mm[a[i]]++;
 	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
-		}else{
-			break;
+	for(int i = m -2; i >= 0; --i){
+		int req = a[m -1], cur = m -2;
+		mii map = mm;
+		map[a[m -1]]--;
+		map[a[i]]--;
+		vii steps;
+		steps.push_back({a[i], a[m -1]});
+		while(cur >= 0){
+			if(!map[a[cur]]){
+				cur--;
+				continue;
+			}
+			steps.push_back({a[cur], req - a[cur]});
+			map[req - a[cur]]--;
+			map[a[cur]]--;
+			req = a[cur];
+			cur--;
 		}
-		++i;
-	}
-
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
+		// debug(steps);
+		bool flag = 0;
+		for(auto [ff, ss]: map){
+			if(ss){
+				flag = 1;
+				break;
+			}
+		}
+		if(!flag){
+			cout << "YES\n" << a[i] + a[m -1] << endl;
+			for(auto [ff, ss]: steps) cout << ff << " " << ss << endl;
+			return;
 		}
 	}
-	cout << include.size() << endl;
-	cout << res << endl;
 
+
+	cout << "NO\n";
 	return;
 }
 
@@ -100,7 +106,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

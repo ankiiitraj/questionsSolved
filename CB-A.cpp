@@ -49,46 +49,53 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+void util(map<int, int> &m, int digit){
+	for(int i = 2; i <= digit; ++i){
+		m[i]++;
+	}
+}
+
+map<int, int> f(string s, int n){
+	int res = 0;
+	map<int, int> m;
+	for(int i = 0; i < n; ++i){
+		int dig = s[i] - '0';
+		util(m, dig);
+	}
+	return m;
+}
+
+string rec(mii &target, string ans, int dig){
+	debug(target);
+	if(target.empty()){
+		return ans;
+	}else if(dig < 2){
+		return "0";
+	}
+
+	string one = rec(target, ans, dig -1);
+	if(target[dig] == 1){
+		target.erase(dig);
+	}else{
+		target[dig]--;
+	}
+	string two = rec(target, ans + to_string(dig), dig);
+	target[dig]++;
+	return max(one, two);
+
+}
+
+
 void solve(){
-	int k;
+	int n;
 	string s;
-	cin >> s >> k;
-	int n = s.length();
+	cin >> n >> s;
 
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
-	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
+	map<int, int> target = f(s, n);
+	debug(target);
+	cout << rec(target, "", 9) << endl;
 
 
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
-		}else{
-			break;
-		}
-		++i;
-	}
-
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
-		}
-	}
-	cout << include.size() << endl;
-	cout << res << endl;
 
 	return;
 }
@@ -100,7 +107,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }
@@ -120,3 +127,4 @@ fenwik - BIT
 binary_search
 segment_tree
 */
+

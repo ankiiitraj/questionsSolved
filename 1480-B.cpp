@@ -50,46 +50,55 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
+	int atk, lyf, n;
+	cin >> atk >> lyf >> n;
+	vi a(n), b(n);
+	scnarr(a, n);
+	scnarr(b, n);
 
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
-	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
+	if(n == 1){
+		int req1 = b[0]/atk + (b[0] % atk == 0 ? 0 : 1), req2 = lyf/a[0] + (lyf % a[0] == 0 ? 0 : 1);
+		
+		if(req1 <= req2){
+			cout << "YES";
 		}else{
-			break;
+			cout << "NO";
 		}
-		++i;
+		return;
 	}
 
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
+	for(int i = 0; i < n; ++i){
+		// debug(lyf, b);
+		int req = b[i]/atk;
+		if(lyf - req * a[i] <= 0){
+			if(i == n -1 and lyf > 0 and atk >= b[i])
+				break;
+			else
+				cout << "NO";
+			return;
 		}
+		b[i] -= atk * req;
+		lyf -= a[i] * req;
 	}
-	cout << include.size() << endl;
-	cout << res << endl;
-
+	vii mons;
+	for(int i = 0; i < n; ++i){
+		if(b[i] > 0)
+			mons.push_back({a[i], b[i]});
+	}
+	n = mons.size();
+	sort(all(mons));
+	for(int i = 0; i < n; ++i){
+		if(i == n -1){
+			if(lyf > 0){
+				cout << "YES";
+			}else{
+				cout << "NO";
+			}
+			return;
+		}
+		lyf -= mons[i].first;
+	}
+	cout << "YES";
 	return;
 }
 
@@ -100,8 +109,10 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--){
 		solve();
+		cout << endl;
+	}
 	return 0;
 }
 

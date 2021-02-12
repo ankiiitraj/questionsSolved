@@ -1,64 +1,73 @@
-#include <iostream>
-#include <map>
-#include <stack>
+#include <bits/stdc++.h>
+#include <time.h>
+#define int long long int
+#define pb push_back
+#define mem(a, x) memset(a, x, sizeof a)
+#define all(a) a.begin(), a.end()
+#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
+#define vi vector<int>
+#define si set<int>
+#define pii pair <int, int>
+#define sii set<pii>
+#define vii vector<pii>
+#define mii map <int, int>
+#define faster ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
 using namespace std;
+using namespace chrono;
+/*
+	----------------------------------------------------------------------
+	Things to remember : check for coners n = 1, pass references instead
+*/
+/* -------------------------------Solution Sarted--------------------------------------*/
 
-int main(){
-	map<string, map<string, string>>table;
-	map<string, string>asso;
-	map<string, int>prec;
-	string oper[] = {"+", "-", "*", "^", "id", "$"};
+//Constants
+const int MOD = 1000000007; // 1e9 + 7
+const int MAXN = 1000005; // 1e6 +5
+const int INF = 100000000000005; // 1e15 +5
 
-	asso["$"] = "N";
-	for (int i = 0; i < 5; i++){
-		cout << "Associativity of " << oper[i] << " is L or R" << "\n";
-		cin >> asso[oper[i]];
+void solve(){
+	int n;
+	cin >> n;
+	vii a(n);
+	for(int i = 0; i < n; ++i) cin >> a[i].second;
+	for(int i = 0; i < n; ++i) cin >> a[i].first;
+
+	sort(all(a));
+	int res = 0, dist = n;
+	for(int i = 0; i < n; ++i){
+		res += min(a[i].second, dist) * a[i].first;
+		dist -= min(a[i].second, dist);
 	}
 
-	for (int i = 0; i < 6; i++){
-		cout << "Precedence of " << oper[i] << " is" << "\n";
-		cin >> prec[oper[i]];
-	}
+	cout << res << endl;
 
-	for (int i = 0; i < 6; i++){
-		for (int j = 0; j < 6; j++){
-			if (oper[i] == oper[j]){
-				if (oper[i] == "id" || oper[i] == "$"){
-					table[oper[i]][oper[i]] =  ".";
-				}
-				else{
-					if (asso[oper[i]] == "L"){
-						table[oper[i]][oper[i]] =  ">";
-					}
-					else{
-						table[oper[i]][oper[i]] =  "<";
-					}
-				}
-			}
-			else{
-				if(prec[oper[i]] > prec[oper[j]]){
-					table[oper[i]][oper[j]] =  ">";
-				}
-				else{
-					table[oper[i]][oper[j]] =  "<";
-				}
-			}
-		}
-	}
+	return;
+}
 
-	cout << "   ";
-	for (int i = 0; i < 6; i++)
-		cout << oper[i] << " ";
-	cout << "\n";
-
-	for (int i = 0; i < 6; i++){
-		cout << oper[i] << " ";
-		if (oper[i] != "id") cout << " ";
-		for (int j = 0; j < 6; j++){
-			cout << table[oper[i]][oper[j]] << " ";
-			if (oper[j] == "id") cout << " ";
-		}
-		cout << "\n";
-	}
+signed main()
+{
+	faster;
+#ifndef ONLINE_JUDGE
+	freopen("ip.txt", "r", stdin);
+	freopen("op.txt", "w", stdout);
+#endif
+	int t; cin >> t; while(t--)
+		solve();
 	return 0;
 }
+
+
+//Author : Ankit Raj
+//Problem Link :
+
+/*Snippets*/
+/*
+sieve - prime factorization using sieve and primes in range
+zpower - pow with mod
+plate - Initial template
+bfs 
+dfs
+fenwik - BIT
+binary_search
+segment_tree
+*/

@@ -4,7 +4,7 @@
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
-#define scnarr(a, n) for (int i = 0; i < n; ++i) cin >> a[i]
+#define scnarr(a, n) for (int i = 1; i <= n; ++i) cin >> a[i]
 #define vi vector<int>
 #define si set<int>
 #define pii pair <int, int>
@@ -46,49 +46,73 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
+const int MAXN = 10005; // 1e4 +5
 const int INF = 100000000000005; // 1e15 +5
 
+vi sizes(MAXN), head(MAXN);
+
+void init(int n){
+	for(int i = 1; i <= n; ++i){
+		sizes[i] = 1;
+		head[i] = i;
+	}
+}
+
+int findHead(int x){
+	if(head[x] == x) return x;
+
+	return head[x] = findHead(head[x]);
+}
+
+void _union(int x, int y){
+	if(sizes[x] < sizes[y]) swap(x, y);
+	int headX = findHead(x), headY = findHead(y);
+	sizes[headX] += sizes[y];
+	head[y] = headX;
+	sizes[y] = 0;
+
+	return;
+}
+
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
-
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
-	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
-		}else{
-			break;
-		}
-		++i;
-	}
-
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
+	int n;
+	cin >> n;
+	vi a(n +1);
+	scnarr(a, n);
+	head = sizes = vi(n +2);
+	init(n);
+	int p, x, y;
+	cin >> p;
+	for(int i = 0; i < p; ++i){
+		cin >> x >> y;
+		if(findHead(x) != findHead(y)){
+			_union(x, y);
 		}
 	}
-	cout << include.size() << endl;
-	cout << res << endl;
+	unordered_map<int, int> m, mh;
+	for(int i = 1; i <= n; ++i){
+		findHead(i);
+		m[head[i]] += a[i];
+		mh[head[i]]++;
+	}
+	// debug(head, m, mh);
+	int _max = 0, _min = INT_MAX, resHead;
+	for(auto itr: m){
+		if(itr.second > _max){
+			_max = itr.second;
+			_min = mh[itr.first];
+			resHead = itr.first;
+		}else if(itr.second == _max and mh[itr.first] < _min){
+			_min = mh[itr.first];
+			resHead = itr.first;
+		}
+	}
+
+	vi res;
+	for(int i = 1; i <= n; ++i){
+		if(head[i] == resHead) cout << i << " ";
+	}
+
 
 	return;
 }
@@ -96,12 +120,11 @@ void solve(){
 signed main()
 {
 	faster;
-#ifndef ONLINE_JUDGE
-	freopen("ip.txt", "r", stdin);
-	freopen("op.txt", "w", stdout);
-#endif
-	// int t; cin >> t; while(t--)
-		solve();
+// #ifndef ONLINE_JUDGE
+// 	freopen("ip.txt", "r", stdin);
+// 	freopen("op.txt", "w", stdout);
+// #endif
+	solve();
 	return 0;
 }
 

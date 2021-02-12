@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include <time.h>
-// #define int long long int
+#define int long long int
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
@@ -23,58 +23,62 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-const int INF = 1000000005; // 1e15 +5
-int _max;
+const int INF = 100000000000005; // 1e15 +5
 
-vector<vector<int>> dp;
-
-int rec(int cost, int pos, int x, int n, vi &a){
-	if(pos == n){
-		if(is_sorted(all(a)))
-			return cost;
-		return INF;
-	}
-	if(dp[pos][x] != -1)
-		return dp[pos][x];
-
-	int two = INF;
-	if(a[pos] > x){
-		swap(a[pos], x);
-		two = rec(cost +1, pos +1, x, n, a);
-		swap(a[pos], x);
-	}
-	int one = rec(cost, pos +1, x, n, a);
-	dp[pos][x] = min(one, two);
-	return dp[pos][x];
-}
-
+int rec(int pos)
 
 void solve(){
-	dp = vector<vi>(505, vi(505, -1));
-	int n, x;
-	cin >> n >> x;
-	vi a(n);
-	for(int i = 0; i < n; ++i) cin >> a[i];
-	_max = *max_element(all(a));
-	int res = rec(0, 0, x, n, a);
-	if(res > n){
-		cout << "-1\n";
+	int n;
+	cin >> n;
+	vi a(n), b;
+	scnarr(a, n);
+
+	for(int i = 0; i < n; ++i){
+		int j = i +1;
+		while(j < n and a[j] == a[i]){
+			++j;
+		}
+
+		if(j - i >= 2){
+			b.push_back(a[i]);
+		}
+		b.push_back(a[i]);
+
+		i = j -1;
+	}
+	n = b.size();
+	if(n <= 2){
+		cout << n << endl;
 		return;
 	}
-
-	cout << res << endl;
-
+	vi x, y;
+	y.push_back(-1);
+	if(b[0] == b[1]){
+		x.push_back(b[0]);
+		y.push_back(b[1]);
+	}else{
+		x.push_back(b[0]);
+		x.push_back(b[1]);
+	}
+	for(int i = 2; i < n; ++i){
+		if(x.back() != b[i]){
+			x.push_back(b[i]);
+		}else if(y.back() != b[i]){
+			y.push_back(b[i]);
+		}
+	}
+	cout << (x.size() + y.size() -1) << endl;
 	return;
 }
 
-int main()
+signed main()
 {
 	faster;
 #ifndef ONLINE_JUDGE
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	int t; cin >> t; while(t--)
+	// int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

@@ -50,45 +50,61 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
+	int n, m, k;
+	cin >> n >> m >> k;
+	vi a(k), b(k);
+	scnarr(a, k);
+	scnarr(b, k);
 
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
+	vi freq(m +2, 0);
+	
+	map<int, vi> bp;
+	for(int i = 0; i < k; ++i){
+		bp[a[i]].push_back(b[i]);
 	}
 
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
+	// for(auto itr: bp){
+	// 	cout << itr.first <<": ";
+	// 	for(auto it: itr.second){
+	// 		cout << it << " ";
+	// 	}
+	// 	cout << endl;
+	// }
 
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
-		}else{
-			break;
-		}
-		++i;
-	}
-
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
+	for(auto itr: bp){
+		for(auto it: itr.second){
+			if(it == 1){
+				freq[2]++;
+			}else{
+				freq[1]++;
+				freq[it]--;
+				if(it < m){
+					freq[it +1]++;
+				}
+			}
 		}
 	}
-	cout << include.size() << endl;
-	cout << res << endl;
+
+	for(int i = 2; i <= m; ++i){
+		freq[i] += freq[i -1];
+	}
+	// debug(freq);
+	int ways = 0;
+
+	for(auto itr: bp){
+		unordered_map<int, int> coun;
+		for(auto it: itr.second){
+			coun[it]++;
+		}
+		for(auto it: itr.second){
+			ways += freq[it] - (itr.second.size() - coun[it]);
+		}
+		// cout << ways << " ";
+	}
+
+	ways /= 2;
+
+	cout << ways << endl;
 
 	return;
 }
@@ -100,7 +116,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

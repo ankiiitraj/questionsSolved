@@ -49,45 +49,44 @@ const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
-void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
-
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
-	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
+int power(int x, int y){
+	int ans = 1;
+	while(y > 0){
+		if(y&1){
+			ans = (ans * x)%MOD;
+			--y;
 		}else{
-			break;
+			x = (x * x)%MOD;
+			y /= 2;
 		}
-		++i;
+	}
+	return ans;
+}
+
+void solve(){
+	int n, res = 0;
+	cin >> n;
+	vi a(n);
+	scnarr(a, n);
+
+	vi ands(n), ors(n), freq(62);
+
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < 62; ++j){
+			if((a[i] >> j) & 1LL)
+				freq[j]++;
+		}
+	}
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < 62; ++j){
+			int bit = (int)(a[i] >> j) & 1LL;
+			ands[i] = (ands[i] + (bit * freq[j] * (int)power(2LL, j)) % MOD) % MOD;
+			ors[i] = (ors[i] + (!bit ? (freq[j] * (int)power(2LL, j)) % MOD: (n * (int)power(2LL, j)) % MOD) % MOD) % MOD;
+		}
+		int temp = ands[i] * ors[i] % MOD;
+		res = (res + temp) % MOD;
 	}
 
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
-		}
-	}
-	cout << include.size() << endl;
 	cout << res << endl;
 
 	return;
@@ -100,7 +99,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

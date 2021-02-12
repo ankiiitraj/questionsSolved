@@ -50,45 +50,40 @@ const int MAXN = 1000005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
+	int n, x, sum = 0;
+	cin >> n >> x;
+	vi a(n);
+	scnarr(a, n);
+	map<int, vi> m;
+	for(int i = 0; i < n; ++i) m[0].push_back(a[i]), sum += a[i];
 
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
-	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
-		}else{
-			break;
-		}
-		++i;
-	}
-
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
+	for(int i = 0; i < n; ++i){
+		int layers = 0;
+		int temp = a[i];
+		while(temp % x == 0){
+			layers++;
+			temp /= x;
+			m[layers].push_back(temp);
 		}
 	}
-	cout << include.size() << endl;
-	cout << res << endl;
+
+	// for(auto itr: m){
+	// 	cout << itr.first << ": ";
+	// 	for(auto it: itr.second){
+	// 		cout << it << " ";
+	// 	}
+	// 	cout << endl;
+	// }
+
+	for(int i = 1; ; ++i){
+		for(int j = 0; j < n; ++j){
+			if(m[i -1][j] % x != 0){
+				cout << sum << endl;
+				return;
+			}
+			sum += m[i][j] * x * pow(x, i -1);
+		}
+	}
 
 	return;
 }
@@ -100,7 +95,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

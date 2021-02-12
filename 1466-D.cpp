@@ -46,50 +46,43 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
-const int MAXN = 1000005; // 1e6 +5
+const int MAXN = 100005; // 1e6 +5
 const int INF = 100000000000005; // 1e15 +5
 
+
 void solve(){
-	int k;
-	string s;
-	cin >> s >> k;
-	int n = s.length();
+	int n, total = 0;
+	cin >> n;
+	vi a(n +1);
+	vi adj[n +1];
+	for(int i = 1; i <= n; ++i) cin >> a[i], total += a[i];
 
-	map<char, int> m;
-	set<char> exclude, include;
-	vector<pair<int, char>> v;
-
-	for(char c: s){
-		m[c]++;
+	int u, v;
+	for(int i = 0; i < n -1; ++i){
+		cin >> u >> v;
+		adj[u].push_back(v);
+		adj[v].push_back(u);
 	}
-
-	for(auto [ff, ss]: m){
-		v.push_back({ss, ff});
-	}
-
-
-	sort(all(v));
-	int i = 0;
-	while(k > 0){
-		if(k >= v[i].first){
-			k -= v[i].first;
-			exclude.insert(v[i].second);
-		}else{
-			break;
-		}
-		++i;
-	}
-
-	string res;
-	for(auto c: s){
-		if(!exclude.count(c)){
-			res += c;
-			include.insert(c);
+	vi wts;
+	for(int i = 1; i <= n; ++i){
+		if(adj[i].size() > 1){
+			int j = 0;
+			while(j < adj[i].size() -1){
+				wts.push_back(a[i]);
+				++j;
+			}
 		}
 	}
-	cout << include.size() << endl;
-	cout << res << endl;
+	
+	sort(all(wts));
+	reverse(all(wts));
+	cout << total << " ";
+	for(int i = 0; i < n -2; ++i){
+		total += wts[i];
+		cout << total << " ";
+	}
 
+	cout << endl;
 	return;
 }
 
@@ -100,7 +93,7 @@ signed main()
 	freopen("ip.txt", "r", stdin);
 	freopen("op.txt", "w", stdout);
 #endif
-	// int t; cin >> t; while(t--)
+	int t; cin >> t; while(t--)
 		solve();
 	return 0;
 }

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include <time.h>
-// #define int long long int
+#define int long long int
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
@@ -23,51 +23,74 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-const int INF = 1000000005; // 1e15 +5
-int _max;
+const int INF = 100000000000005; // 1e15 +5
 
-vector<vector<int>> dp;
-
-int rec(int cost, int pos, int x, int n, vi &a){
-	if(pos == n){
-		if(is_sorted(all(a)))
-			return cost;
-		return INF;
+int countDigs(int a){
+	int res = 0;
+	while(a){
+		a /= 10;
+		res++;
 	}
-	if(dp[pos][x] != -1)
-		return dp[pos][x];
-
-	int two = INF;
-	if(a[pos] > x){
-		swap(a[pos], x);
-		two = rec(cost +1, pos +1, x, n, a);
-		swap(a[pos], x);
-	}
-	int one = rec(cost, pos +1, x, n, a);
-	dp[pos][x] = min(one, two);
-	return dp[pos][x];
+	return res;
 }
 
+bool numHave(int a, int d){
+	while(a){
+		if(a%10 == d)
+			return 1;
+		a /= 10;
+	}
+	return 0;
+}
+
+int rec(int a, int n, vi &space, vector<vi> &dp){
+	if(a == 0)
+		return 1;
+	if(n < 0 or a < 0) return 0;
+
+	if(dp[n][a] != -1)
+		return dp[n][a];
+
+	return dp[n][a] = (rec(a - space[n], n, space, dp) | rec(a, n -1, space, dp));
+}
 
 void solve(){
-	dp = vector<vi>(505, vi(505, -1));
-	int n, x;
-	cin >> n >> x;
+	int n, d;
+	cin >> n >> d;
 	vi a(n);
-	for(int i = 0; i < n; ++i) cin >> a[i];
-	_max = *max_element(all(a));
-	int res = rec(0, 0, x, n, a);
-	if(res > n){
-		cout << "-1\n";
-		return;
-	}
+	scnarr(a, n);
+	int num = d;
+	for(int i = 0; i < n; ++i){
+		int numOfDigs = countDigs(a[i]);
+		if(numOfDigs >= 3){
+			cout << "YES\n";
+			continue;
+		}
+		if(numOfDigs == 1){
+			if(a[i] % d != 0){
+				cout << "NO\n";
+				continue;
+			}
+			cout << "YES\n";
+			continue;
+		}
 
-	cout << res << endl;
+		vi space;
+		for(int j = 0; j <= a[i]; ++j){
+			if(numHave(j, d)){
+				space.push_back(j);
+			}
+		}
+		vector<vi> dp(space.size() +5, vi(a[i] +5, -1));
+
+		cout << (rec(a[i], space.size() -1, space, dp) ? "YES" : "NO") << endl;
+
+	}
 
 	return;
 }
 
-int main()
+signed main()
 {
 	faster;
 #ifndef ONLINE_JUDGE

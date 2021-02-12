@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include <time.h>
-// #define int long long int
+#define int long long int
 #define pb push_back
 #define mem(a, x) memset(a, x, sizeof a)
 #define all(a) a.begin(), a.end()
@@ -23,51 +23,59 @@ using namespace chrono;
 //Constants
 const int MOD = 1000000007; // 1e9 + 7
 const int MAXN = 1000005; // 1e6 +5
-const int INF = 1000000005; // 1e15 +5
-int _max;
-
-vector<vector<int>> dp;
-
-int rec(int cost, int pos, int x, int n, vi &a){
-	if(pos == n){
-		if(is_sorted(all(a)))
-			return cost;
-		return INF;
-	}
-	if(dp[pos][x] != -1)
-		return dp[pos][x];
-
-	int two = INF;
-	if(a[pos] > x){
-		swap(a[pos], x);
-		two = rec(cost +1, pos +1, x, n, a);
-		swap(a[pos], x);
-	}
-	int one = rec(cost, pos +1, x, n, a);
-	dp[pos][x] = min(one, two);
-	return dp[pos][x];
-}
-
+const int INF = 100000000000005; // 1e15 +5
 
 void solve(){
-	dp = vector<vi>(505, vi(505, -1));
-	int n, x;
-	cin >> n >> x;
-	vi a(n);
-	for(int i = 0; i < n; ++i) cin >> a[i];
-	_max = *max_element(all(a));
-	int res = rec(0, 0, x, n, a);
-	if(res > n){
-		cout << "-1\n";
+	string s;
+	cin >> s;
+	int n = s.length(), res = 0;
+
+	if(n == 1){
+		cout << "0\n";
+		return;
+	}
+	if(n == 2){
+		if(s[0] == s[1]){
+			cout << "1\n";
+		}else{
+			cout << "0\n";
+		}
 		return;
 	}
 
+	int c = 0;
+	for(int i = 1; i < n -1; ++i){
+		if(s[i -1] == s[i] and  s[i] == s[i +1]){
+			res += 2;
+			s[i] = c + 'A';
+			c++;
+			c %= 26;
+			s[i +1] = c + 'A';
+			c++;
+			c %= 26;
+		}else if(s[i -1] == s[i +1]){
+			res += 1;
+			s[i +1] = c + 'A';
+			c++;
+			c %= 26;
+		}else if(s[i] == s[i -1]){
+			res += 1;
+			s[i] = c + 'A';
+			c++;
+			c %= 26;
+		}
+	}
+	if(s[n -1] == s[n -2]){
+		res++;
+	}
+	// cout << s << " ";
 	cout << res << endl;
+
 
 	return;
 }
 
-int main()
+signed main()
 {
 	faster;
 #ifndef ONLINE_JUDGE
